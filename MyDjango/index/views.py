@@ -1,8 +1,10 @@
-from django.shortcuts import render, redirect
 from django.db import IntegrityError
 from django.contrib.auth.models import User
-from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
+from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.decorators import  login_required
+from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
+
 
 def home(request):
     return render(request, 'index/home.html')
@@ -56,7 +58,12 @@ def currentMessages(request):
     return render(request, 'index/currentMessages.html', {'form': UserCreationForm()})
 
 
-
+# For google login
+def login(request):
+    return render(request, 'login.html')
+@login_required
+def home(request):
+    return render(request, 'home.html')
 
 
 
