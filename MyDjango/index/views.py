@@ -60,10 +60,11 @@ def currentMessages(request):
 
 # For google login
 def login(request):
-    return render(request, 'login.html')
+    return render(request, 'index/login.html')
+
 @login_required
 def home(request):
-    return render(request, 'home.html')
+    return render(request, 'index/home.html')
 
 
 

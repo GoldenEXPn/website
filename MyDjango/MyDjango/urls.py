@@ -15,19 +15,24 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path
+from django.urls import path, include
+from django.contrib.auth import views as auth_views
 from index import views
 
 urlpatterns = [
     path("admin/", admin.site.urls),
 
     # Auth sign up / log in
-    path('signup/', views.signupuser, name='signupuser'),
-    path('login/', views.loginuser, name='loginuser'),
-    path('logout/', views.logoutuser, name='logoutuser'),
+    path('signupuser/', views.signupuser, name='signupuser'),
+    path('loginuser/', views.loginuser, name='loginuser'),
+    path('logoutuser/', views.logoutuser, name='logoutuser'),
 
 
     # Google API
+    path('login/', views.login, name='login'),
+    path('logout/', auth_views.LogoutView.as_view(), name='logout'),
+    path('social-auth/', include('social_django.urls', namespace='social')),
+    path('', views.home, name='home'),
 
     # Email interaction
     path('home/', views.home, name='home'),
