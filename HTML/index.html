@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <title>SmartMail</title>
+    <style type="text/tailwindcss">
+
+        .navitems>li>a{
+            @apply h-12 px-4 hover:bg-gray-700 rounded-lg flex items-center gap-2
+        }
+    </style>
+</head>
+
+
+<body>
+
+<header class="flex items-center justify-between px-8 bg-gray-800 h-20 text-white sticky top-0 z-50">
+    <logo>
+        <a class="flex items-center gap-1" href="">
+            <!-- h: height, mt: margin top -->
+            <img class="h-8 -mt-2" src="https://img.icons8.com/small/64/ffffff/new-post.png" alt="new-post"/>
+            <span>SmartMail</span>
+        </a>
+    </logo>
+    <nav>
+        <!-- [&>li>a]: find <a> element in <li> element -->
+        <ul class="flex items-center navitems">
+            <!-- lg: large -->
+            <li><a href="">Home</a></li>
+            <li><a href="">Start</a></li>
+            <li><a href="">
+                <img class="h-8 rounded-full object-cover bg-teal-200" src="https://img.icons8.com/small/96/gender-neutral-user.png" alt="gender-neutral-user"/>
+                Log In
+                <img class="w-4" src="https://img.icons8.com/small/64/0EF0E9/expand-arrow.png" alt="expand-arrow"/>
+            </a></li>
+        </ul>
+    </nav>
+</header>
+
+<hero class="block bg-gray-700 text-white text-center py-24 px-10">
+    <h1>Smart Email Assistant</h1>
+    <p>Relax your toes and let SmartMail sort your nmails</p>
+    <a href="">Get Started</a>
+</hero>
+
+</body>
+</html>
