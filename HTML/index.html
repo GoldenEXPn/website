@@ -49,11 +49,22 @@
         .navitems>li>a{
             @apply h-12 px-4 hover:bg-gray-700 rounded-lg flex items-center gap-2
         }
+        .card{
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            position: relative;
+            border-radius: 1rem;
+            box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1);
+            margin-bottom: 2rem;
+            background-color: white;
+            padding-bottom: 1rem;
+        }
     </style>
 </head>
 
 
-<body>
+<body class="bg-gray-100">
 
 <header class="flex items-center justify-between px-8 bg-gray-800 h-20 text-white sticky top-0 z-50">
     <logo>
@@ -87,6 +98,15 @@
     </div>
 
 </hero>
+
+
+<content class="grid grid-cols-3 max-w-7xl mx-auto mt-6">
+    <main class="col-span-2 mx-[10%]">
+        <article class="card h-36">Email</article>
+    </main>
+    <aside class="col-span-1 mr-[20%] bg-red-200">Sidebar</aside>
+</content>
+
 
 </body>
 </html>
