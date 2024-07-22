@@ -13,13 +13,17 @@
         :root{
             --primary: rgb(88,40,244);
             --primary-hover: rgb(69, 29, 200);
+            --font1: 'Anton SC', sans-serif
         }
         h1{
             font-size: 4rem;
             line-height: 1.2;
             font-weight: bold;
             margin-bottom: 1rem;
-            font-family: 'Anton SC';
+            font-family: var(--font1);
+        }
+        .font1{
+            font-family: var(--font1);
         }
         .button{
             display: inline-flex;
@@ -102,14 +106,35 @@
 
 <content class="grid grid-cols-3 max-w-7xl mx-auto mt-6">
     <main class="col-span-2 mx-[10%]">
-        <article class="card h-36">
+        <article class="card">
+
+            <!--Category Information-->
             <div class="flex items-center justify-between px-4 h-14">
                 <h3 class="text-lg font-bold w-[50%] truncate">Example Category (Only go to the middle part)</h3>
                 <div class="text-sm text-gray-500">flickr @ <a href="" class="hover:underline" target="blank" >Username</a></div>
             </div>
-            <figure>
-                <a href=""><img class="w-full" src="example_image.jpg" alt="example image"></a>
-            </figure>
+            <!--正文内容-->
+            <p class="px-2">Email Content</p>
+
+            <!--Category count-->
+            <div>
+                <div>
+                    <div class="flex items-center gap-2 text-small mb-5">
+                        <a class="bg-gray-200 rounded-full px-3 py-1 hover:bg-gray-500 hover:text-white" href="">Sub-Category1</a>
+                        <a class="bg-gray-200 rounded-full px-3 py-1 hover:bg-gray-500 hover:text-white" href="">Sub-Category2</a>
+                    </div>
+                </div>
+                <a class="text-sm px-2" href="">Count:</a>
+                <div class="flex items-center justify-between text-sm px-2">
+                    <a class="font-bold hover:underline" href="">Level of confidence: <span class="font-light text-gray-500 ml-2">91%</span></a>
+                    <div class="flex items-center gap-4 [&>a:hover]:underline">
+                        <div class="flex items-center gap-1"><img class="w-5 -mt" src="https://img.icons8.com/small/24/000000/fire-heart.png" alt="fire-heart">1</div>
+                        <a href="">Like</a>
+                        <a href="">Edit</a>
+                        <a href="">Delete</a>
+                    </div>
+                </div>
+            </div>
         </article>
 
     </main>
