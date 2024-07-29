@@ -3,12 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SmartMail</title>
+    <link rel="shortcut icon" type="image/png" href="https://img.icons8.com/small/64/000000/new-post.png"/>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Anton+SC&display=swap" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
-    <title>SmartMail</title>
-    <link rel="shortcut icon" type="image/png" href="https://img.icons8.com/small/64/000000/new-post.png"/>
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    [x-cloak] {
+        display: none !important;
+    }
     <style type="text/tailwindcss">
         :root{
             --primary: rgb(88,40,244);
@@ -73,8 +77,12 @@
         .hoverlist>*{
             @apply hover:bg-gray-100 rounded-md transition duration-150;
         }
-
-
+        .hoverlist>*>a{
+            @apply flex items-center p-2 block;
+        }
+        .highlight{
+            @apply !bg-indigo-100
+        }
     </style>
 </head>
 
@@ -95,11 +103,19 @@
             <!-- lg: large -->
             <li><a href="">Home</a></li>
             <li><a href="">Start</a></li>
-            <li><a href="">
-                <img class="h-8 rounded-full object-cover bg-teal-200" src="https://img.icons8.com/small/96/gender-neutral-user.png" alt="gender-neutral-user"/>
-                Log In
-                <img class="w-4" src="https://img.icons8.com/small/64/0EF0E9/expand-arrow.png" alt="expand-arrow"/>
-            </a></li>
+            <li x-data="{ dropdownOpen: false }" class="relative">
+                <a @click="dropdownOpen = !dropdownOpen" @click.away="dropdownOpen=false" class="cursor-pointer select-none">
+                    <img class="h-8 rounded-full object-cover bg-teal-200" src="https://img.icons8.com/small/96/gender-neutral-user.png" alt="gender-neutral-user"/>
+                    Log In
+                    <img class="w-4" src="https://img.icons8.com/small/64/0EF0E9/expand-arrow.png" alt="expand-arrow"/>
+                </a>
+                <div x-show="dropdownOpen" x-cloak class="absolute right-0 bg-white text-black shadow rounded-lg w-40 p-2 z-20">
+                    <ul class="hoverlist [&>li>a]:justify-end">
+                        <li><a href="">My Profile</a></li>
+                        <li><a href="">Log Out</a></li>
+                    </ul>
+                </div>
+            </li>
         </ul>
     </nav>
 </header>
@@ -147,19 +163,50 @@
                 </div>
             </div>
         </article>
-
     </main>
+
+    <!--Sidebar-->
     <aside class="col-span-1 mr-[20%]">
+        <!--Category selection-->
         <section class="card p-4">
             <h2>Categories</h2>
             <ul class="hoverlist">
-                <li><a href="">Work</a></li>
-                <li><a href="">Finance</a></li>
-                <li><a href="">Subscription</a></li>
-                <li><a href="">Others</a></li>
+                <li class="highlight"><a href="">
+                    <img class="w-8 h-8 object-cover mr-2" src="https://img.icons8.com/ios/50/business--v1.png" alt="work"/>
+                    <span class="font-bold text-sm">Work</span>
+                </a></li>
+                <li><a href="">
+                    <img class="w-8 h-8 object-cover mr-2" src="https://img.icons8.com/forma-light/24/money-box.png" alt="finance"/>
+                    <span class="font-bold text-sm">Finance</span>
+                </a></li>
+                <li><a href="">
+                    <img class="w-8 h-8 object-cover mr-2" src="https://img.icons8.com/ios/50/bill.png" alt="subscription"/>
+                    <span class="font-bold text-sm">Subscription</span>
+                </a></li>
+                <li><a href="">
+                    <img class="w-8 h-8 object-cover mr-2" src="https://img.icons8.com/external-kiranshastry-lineal-kiranshastry/64/external-more-multimedia-kiranshastry-lineal-kiranshastry.png" alt="others"/>
+                    <span class="font-bold text-sm">Others</span>
+                </a></li>
+            </ul>
+        </section>
+        <!--Priority selection-->
+        <section class="card p-4">
+            <h2 class="">Filter by priority</h2>
+            <ul class="hoverlist">
+                <li><a href="">
+                    <img src="https://img.icons8.com/ios/50/high-priority.png" alt="high-prio">
+                    <span class="font-bold text-sm ml-1 mr-1">High Priority</span>
+                    <span class="text-sm font-light text-gray-500">(5 counts)</span>
+                </a></li>
+                <li><a href="">
+                    <img src="https://img.icons8.com/fluency-systems-regular/48/low-priority.png" alt="high-prio">
+                    <span class="font-bold text-sm ml-1 mr-1">Low Priority</span>
+                    <span class="text-sm font-light text-gray-500">(5 counts)</span>
+                </a></li>
             </ul>
         </section>
     </aside>
+
 </content>
 
 
