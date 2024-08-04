@@ -3,8 +3,8 @@
   <component name="FacetManager">
     <facet type="django" name="Django">
       <configuration>
-        <option name="rootFolder" value="$MODULE_DIR$/MyDjango" />
-        <option name="settingsModule" value="MyDjango/settings.py" />
+        <option name="rootFolder" value="$MODULE_DIR$/test1/fetch_gmail" />
+        <option name="settingsModule" value="fetch_gmail/settings.py" />
         <option name="manageScript" value="manage.py" />
         <option name="environment" value="&lt;map/&gt;" />
         <option name="doNotUseTestRunner" value="false" />
@@ -13,15 +13,11 @@
     </facet>
   </component>
   <component name="NewModuleRootManager">
-    <content url="file://$MODULE_DIR$" />
+    <content url="file://$MODULE_DIR$">
+      <excludeFolder url="file://$MODULE_DIR$/test1" />
+    </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="library" name="bootstrap" level="application" />
-    <orderEntry type="library" name="alpinejs" level="application" />
-  </component>
-  <component name="PyDocumentationSettings">
-    <option name="format" value="PLAIN" />
-    <option name="myDocStringFormat" value="Plain" />
   </component>
   <component name="TemplatesService">
     <option name="TEMPLATE_CONFIGURATION" value="Django" />
