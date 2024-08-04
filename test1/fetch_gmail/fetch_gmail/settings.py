@@ -31,6 +31,9 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    # django-apps
+    'dashboard',
+    'gmail_integration',
     # all-auth apps
     'allauth',
     'allauth.account',
