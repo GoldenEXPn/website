@@ -17,10 +17,11 @@ Including another URLconf
 
 from django.contrib import admin
 from django.urls import path, include
-from dashboard import views
+from dashboard.views import *
 
 urlpatterns = [
     path("admin/", admin.site.urls),
+    path("", ReactView.as_view(), name="yo"),
     path('accounts/', include('allauth.urls')),
-    path('accounts/profile/', views.profile, name='profile'),
+    path('accounts/profile/', profile, name='profile'),
 ]

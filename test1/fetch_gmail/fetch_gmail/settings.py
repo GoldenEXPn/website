@@ -46,6 +46,9 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    
+    'rest_framework',
+    'corsheaders',
 ]
 
 MIDDLEWARE = [
@@ -59,9 +62,13 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
+    
+    'corsheaders.middleware.CorsMiddleware'
 ]
 
 ROOT_URLCONF = "fetch_gmail.urls"
+
+CORS_ORIGIN_ALLOW_ALL = True
 
 TEMPLATES = [
     {
@@ -81,6 +88,11 @@ TEMPLATES = [
 
 WSGI_APPLICATION = "fetch_gmail.wsgi.application"
 
+REST_FRAMEWORK = {
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.AllowAny',
+    ],
+}
 
 # Database
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
