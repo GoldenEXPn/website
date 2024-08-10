@@ -1,0 +1,5 @@
+PyJWT
+django
+django-allauth
+django-cors-headers
+djangorestframework
