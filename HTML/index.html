@@ -10,10 +10,10 @@
     <link href="https://fonts.googleapis.com/css2?family=Anton+SC&display=swap" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
-    [x-cloak] {
-        display: none !important;
-    }
     <style type="text/tailwindcss">
+        [x-cloak] {
+            display: none !important;
+        }
         :root{
             --primary: rgb(88,40,244);
             --primary-hover: rgb(69, 29, 200);
@@ -83,23 +83,45 @@
         .highlight{
             @apply !bg-indigo-100
         }
+        .titleBlip{
+            animation: 1s fadeIn;
+        }
+        @keyframes fadeIn {
+            0% {opacity: 0;}
+            10% {opacity: 0;}
+            100% {opacity: 1;}
+            
+        }
     </style>
 </head>
 
 
 <body class="bg-gray-100">
 
-<header class="flex items-center justify-between px-8 bg-gray-800 h-20 text-white sticky top-0 z-50">
-    <logo>
-        <a class="flex items-center gap-1" href="">
-            <!-- h: height, mt: margin top -->
-            <img class="h-8 -mt-2" src="https://img.icons8.com/small/64/ffffff/new-post.png" alt="new-post"/>
-            <span>SmartMail</span>
-        </a>
-    </logo>
-    <nav>
+<header x-data="{ mobilenavOpen: false }" class="md:flex items-center justify-between [&>*]:px-8 bg-gray-800 h-20 text-white sticky top-0 z-50">
+    <div class="flex items-center justify-between h-20">
+        <logo>
+            <a class="flex items-center gap-1" href="">
+                <!-- h: height, mt: margin top -->
+                <img class="h-8 -mt-2" src="https://img.icons8.com/small/64/ffffff/new-post.png" alt="new-post"/>
+                <span>SmartMail</span>
+            </a>
+        </logo>
+        <mobileicon x-cloak class="md:hidden">
+            <a @click="mobilenavOpen = !mobilenavOpen" class="h-12 w-12 flex items-center justify-center cursor-pointer hover:bg-gray-700 rounded-lg">
+                <img x-show="!mobilenavOpen" class="w-6 h-6 select-none" src="https://img.icons8.com/small/64/ffffff/menu.png"/>
+                <img x-show="mobilenavOpen" class="w-6 h-6 select-none" src="https://img.icons8.com/small/64/ffffff/delete-sign.png"/>
+            </a>
+        </mobileicon>
+    </div>
+    
+    <nav x-cloak x-show="mobilenavOpen" class="md:!block bg-gray-800 h-screen w-screen md:h-auto md:w-auto -mt-20 md:mt-0 absolute md:relative z-[-1]"
+    x-transition:enter="duration-300 ease-out"
+    x-transition:enter-start="opacity-0 -translate-y-96"
+    x-transition:enter-end="opacity-100 -translate-y-0"
+    >
         <!-- [&>li>a]: find <a> element in <li> element -->
-        <ul class="flex items-center navitems">
+        <ul class="flex items-center navitems flex-col md:flex-row gap-8 md:gap-0 justify-center h-full -translate-y-10 md:translate-y-0">
             <!-- lg: large -->
             <li><a href="">Home</a></li>
             <li><a href="">Start</a></li>
@@ -109,7 +131,7 @@
                     Log In
                     <img class="w-4" src="https://img.icons8.com/small/64/0EF0E9/expand-arrow.png" alt="expand-arrow"/>
                 </a>
-                <div x-show="dropdownOpen" x-cloak class="absolute right-0 bg-white text-black shadow rounded-lg w-40 p-2 z-20">
+                <div x-cloak x-show="dropdownOpen" class="absolute right-0 bg-white text-black shadow rounded-lg w-40 p-2 z-20">
                     <ul class="hoverlist [&>li>a]:justify-end">
                         <li><a href="">My Profile</a></li>
                         <li><a href="">Log Out</a></li>
@@ -123,7 +145,7 @@
 <hero class="grid bg-gray-700 text-white text-center bg-cover bg-center bg-[url('https://pbs.twimg.com/media/EYWu1sBU8AMYIXl?format=jpg&name=large')]">
     <div class="col-start-1 row-start-1 bg-gray-800 bg-opacity-20 w-full h-full"></div>
     <div class="col-start-1 row-start-1 py-24 px-10">
-        <h1>Smart Email Assistant</h1>
+        <h1 class="titleBlip">Smart Email Assistant</h1>
         <p class="text-lg mb-10 font-bold">Relax your toes and let SmartMail sort your emails</p>
         <a class="button" href="">Get Started</a>
     </div>
