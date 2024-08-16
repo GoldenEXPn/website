@@ -7,7 +7,6 @@ import theme from "../../asset/styles/theme"
 import { ThemeProvider } from "@mui/material/styles";
 import CssBaseline from "@mui/material/CssBaseline";
 
-
 const HomeLayout = () => {
     return (
       <div id="wrapper" className="fade-in">

@@ -3,9 +3,10 @@
 
 
 import Main from "./Main";
-import Menu from "./Menu";
 import Bars from "./Bars";
 import theme from "../../asset/styles/theme"
+
+// import Menu from "./Menu";
 
 import { ThemeProvider } from "@mui/material/styles";
 import CssBaseline from "@mui/material/CssBaseline";
@@ -13,11 +14,10 @@ import CssBaseline from "@mui/material/CssBaseline";
 
 const HomeLayout = () => {
     return (
-      <div id="wrapper" className="fade-in">
+      <div id="wrapper" className="fade-in flex">
         <ThemeProvider theme={theme}>
           <CssBaseline />
           <Bars />
-          <Menu />
           <Main />
         </ThemeProvider>
       </div>

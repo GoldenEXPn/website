@@ -11,9 +11,7 @@ function Main() {
        <Outlet/>
 
       {/* 
-
         <hr />
-
         <h2>Form</h2>
         <form method="post" action="#">
           <div className="row gtr-uniform">
@@ -63,9 +61,7 @@ function Main() {
             </div>
           </div>
         </form>
-
         <hr />
-      
       </section> */}
     </div>
   );
