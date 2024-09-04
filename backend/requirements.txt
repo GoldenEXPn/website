@@ -1,6 +1,9 @@
 PyJWT
 Django
 django-allauth
+cryptography
+requests
+
 django-cors-headers
 djangorestframework
 

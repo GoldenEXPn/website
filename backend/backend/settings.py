@@ -37,7 +37,9 @@ REST_FRAMEWORK = {
         "rest_framework_simplejwt.authentication.JWTAuthentication",
     ),
     "DEFAULT_PERMISSION_CLASSES": [
-        "rest_framework.permissions.IsAuthenticated",
+        # "rest_framework.permissions.IsAuthenticated",
+        "rest_framework.permissions.AllowAny",
+
     ],
 }
 
@@ -55,12 +57,13 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    
+
     'api',
-    
+    'gmail',
+
     'rest_framework',
     'corsheaders',
-    
+
     'allauth',
     'allauth.account',
     'allauth.socialaccount',
@@ -69,7 +72,7 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     # default middleware
-    
+
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -77,7 +80,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    
+
     # allauth middleware
     'allauth.account.middleware.AccountMiddleware',
     # rest middleware
