@@ -1,4 +1,6 @@
 # TODO
+- 8/15/2024
+
 ## Ideas
 - there is home, news, team contacts, and login.
     - login logs and check the authorization
@@ -12,9 +14,9 @@
 
 
 ## layout 
-- intro *NOT FINISHED*
+- intro 
     - only home has intro animation
-- header *NOT FINISHED*
+- header 
     - should be a little fancy
 - nav
     - left: 

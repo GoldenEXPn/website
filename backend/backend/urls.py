@@ -21,7 +21,11 @@ from api.views import *
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', ReactView.as_view(), name="xxx"),
+    path('', ReactView.as_view(), name="api"),
+    path('react/', ReactView.as_view(), name='react-list-create'),
+    path('react/<int:pk>/', ReactView.as_view(), name='react-detail'),
+
+
     path('accounts/', include('allauth.urls')),
     path('accounts/profile/', profile, name='profile'),
 ]

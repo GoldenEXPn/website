@@ -11,6 +11,7 @@ import React, { useEffect } from "react";
 
 import { AppRouter } from './routes';
 
+const address = 'http://localhost:8000'
 
 class App extends React.Component {
   state = {details:[], }
@@ -18,7 +19,7 @@ class App extends React.Component {
 
   componentDidMount() {
     let data;
-    axios.get('http://localhost:8000')
+    axios.get(address)
       .then(res => {
         data = res.data;
         this.setState({
