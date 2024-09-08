@@ -1,6 +1,6 @@
 //TODO: should I combine both main?
 //TODO: should I combine themeprovider?
-
+import React from 'react';
 
 import Main from "./Main";
 import Bars from "./Bars";

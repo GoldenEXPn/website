@@ -1,5 +1,5 @@
 import { useRef } from "react";
-
+import React from 'react';
 // import Post from "../../posts/Post";
 import PostCollection from "../../../../components/elements/PostCollection";
 // import ArrowOutwardRoundedIcon from "@mui/icons-material/ArrowOutwardRounded";

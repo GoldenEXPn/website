@@ -1,4 +1,7 @@
 // Main Component
+
+import React from 'react';
+
 import Question from "./Question";
 import MaxWidthWrapper from "../wrappers/MaxWidthWrapper"
 

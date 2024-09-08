@@ -8,6 +8,10 @@ email: None
 
 password: root
 
+# Requirement
+
+
+npm, node, nvm for node version control, python, django,
 
 # build
 
@@ -23,4 +27,12 @@ source env/bin/activate
 
 To install the dependency for django
 pip install -r requirements.txt
+
+
+uses webpack for compile:
+webpack serve --config webpack.config.js
+
+default compile method:
+"start": "react-scripts start --host",
+"build": "react-scripts build",
 

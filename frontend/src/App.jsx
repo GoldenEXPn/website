@@ -4,6 +4,8 @@
 
 /*
   dependable on the local address of the rest framework (backend location to get the logic)
+
+  TODO: how to refresh everytime I make a submit post action
 **/
 import axios from 'axios';
 
@@ -54,8 +56,8 @@ class App extends React.Component {
           {this.state.details.length > 0 ? (
             this.state.details.map((output, index) => (
               <div key={index}>
-                <h3>{output.email_title}</h3>
-                <p>{output.content}</p>
+                <h3>{"Title: " + output.email_title}</h3>
+                <p>{"Content: " + output.content}</p>
               </div>
             ))
           ) : (

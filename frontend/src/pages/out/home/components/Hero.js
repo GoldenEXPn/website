@@ -1,6 +1,7 @@
+import React from 'react';
+
 import { useEffect, useRef } from "react";
 import { gsap } from "gsap";
-
 
 import Interactive from './Interactive';
 
