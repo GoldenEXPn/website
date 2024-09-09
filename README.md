@@ -29,10 +29,10 @@ To install the dependency for django
 pip install -r requirements.txt
 
 
-uses webpack for compile:
-webpack serve --config webpack.config.js
+Compile methods:
+npm start: webpack serve --config webpack.config.js
+npm run default: npm react-scripts start --host
 
-default compile method:
-"start": "react-scripts start --host",
-"build": "react-scripts build",
+
+
 

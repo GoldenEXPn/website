@@ -18,7 +18,8 @@ module.exports = {
     static: path.resolve(__dirname, "public"), // Serve files from 'public' directory
     port: 3000, // Dev server port
     open: true, // Open the browser after the server starts
-    hot: true, // Enable Hot Module Replacement (HMR)
+    hot: true,
+    historyApiFallback: true, // Enable Hot Module Replacement (HMR)
   },
   module: {
     rules: [

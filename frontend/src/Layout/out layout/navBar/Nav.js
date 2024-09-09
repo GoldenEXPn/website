@@ -87,7 +87,7 @@ function Nav() {
       <List>
         {Array.from(pages.values()).map((item) =>
           item.landing ? (
-            <ListItem key={item.name} disablesPadding>
+            <ListItem key={item.name} disablespadding="true">
               <ListItemButton
                 component={NavLink}
                 to={item.path}

@@ -3,6 +3,7 @@ import React from "react";
 import GoogleIcon from "@mui/icons-material/Google";
 import { IconButton } from "@mui/material";
 import AnimatedWrapper from "../wrappers/AnimatedWrapper";
+import { NavLink } from "react-router-dom";
 // import { size } from "../../lib/vars";
 
 function GoogleLoginButton({ href }) {
@@ -17,15 +18,14 @@ function GoogleLoginButton({ href }) {
       }}
       className="flex"
     >
-      <IconButton
-        aria-label="google login"
-        href={href}
-        sx={{ width: "12rem",
-            height: "12rem",
-            fontSize: "5rem" }}
-      >
-        <GoogleIcon sx={{ fontSize: 'inherit' }}/>
-      </IconButton>
+      <NavLink to={href}>
+        <IconButton
+          aria-label="google login"
+          sx={{ width: "12rem", height: "12rem", fontSize: "5rem" }}
+        >
+          <GoogleIcon sx={{ fontSize: "inherit" }} />
+        </IconButton>
+      </NavLink>
     </AnimatedWrapper>
   );
 }
