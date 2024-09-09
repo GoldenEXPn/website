@@ -12,26 +12,39 @@ password: root
 
 
 npm, node, nvm for node version control, python, django,
+```nvm -v```
+0.39.7
+
+```nvm use 20```
+Now using node v20.15.1 (npm v10.7.0)
+
 
 # build
 
-To start a python enviroment:
-    python -m venv env
+1. To start a python enviroment:
+    ```python -m venv env```
 
-To activate the enviroment:
-for windows
-env\Scripts\activate
+2. To activate the enviroment:
+ - for windows
+```env\Scripts\activate```
 
-for mac
-source env/bin/activate
+ - for mac
+```source env/bin/activate```
 
-To install the dependency for django
-pip install -r requirements.txt
+3. Install the dependency for django:
+```cd backend```
+```pip install -r requirements.txt```
 
+4. Install the dependency for npm(node version=20):
+```cd frontend```
+```npm install```
 
-Compile methods:
-npm start: webpack serve --config webpack.config.js
-npm run default: npm react-scripts start --host
+5. run:
+ - front-end Compile methods:
+ - - ```npm start```: webpack serve --config webpack.config.js
+ - - ```npm run default```: npm react-scripts start --host
+ - back-end compile method:
+ - - ```python manage.py runserver```
 
 
 
