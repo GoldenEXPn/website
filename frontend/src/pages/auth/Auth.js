@@ -1,4 +1,5 @@
 import React from "react";
+import { GoogleLogin } from 'react-google-login'
 import MaxWidthWrapper from "../../components/wrappers/MaxWidthWrapper";
 import GoogleLoginButton from "../../components/buttons/GoogleLoginButton";
 // import { GOOGLE_LOGIN_URL } from "../../backendurl";
