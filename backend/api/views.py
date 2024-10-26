@@ -1,72 +1,88 @@
-from django.shortcuts import render
-from rest_framework.views import APIView
-from rest_framework.response import Response
+"""
+`backend.api.views`:
+
+This app is responsible for handling the Google authentication.
+It receives a token from the frontend, verifies it, and creates a new user if it doesn't exist.
+It then generates a JWT token and returns it to the frontend.
+"""
+# General setting
+from django.conf import settings
 from rest_framework import status
+from rest_framework.views import APIView
 
-from .models import *
-from .serializer import *
+# For authentication
+from google.oauth2 import id_token
+from google.auth.transport import requests
+from django.contrib.auth.models import User
+from rest_framework.response import Response
+from rest_framework_simplejwt.tokens import RefreshToken
 
-
-class ReactView(APIView):
-    # I don't know why when I put this line of code I am able to access
-    # to the html form of the post in rest frame work
-    serializer_class = ReactSerializer
-
-    def get(self, request, pk=None):
-        if pk is not None:
-            # Handle the case where a specific object is requested
-            try:
-                react_instance = React.objects.get(pk=pk)
-                serializer = ReactSerializer(react_instance)
-                return Response(serializer.data, status=status.HTTP_200_OK)
-            except React.DoesNotExist:
-                return Response({"error": "Object not found"}, status=status.HTTP_404_NOT_FOUND)
-        else:
-            # Handle the case where all objects are listed
-            try:
-                output = [{"email_title": output.email_title,
-                           "sender": output.sender,
-                           "content": output.content,
-                           "received_date": output.received_date}
-                          for output in React.objects.all()]
-                return Response(output, status=status.HTTP_200_OK)
-            except Exception as e:
-                return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-            
-    # def get(self, request):
-    #     try:
-    #         output = [{"email_title": output.email_title,
-    #                    "sender": output.sender,
-    #                    "content": output.content,
-    #                    "received_date": output.received_date}
-    #                   for output in React.objects.all()]
-    #         return Response(output, status=status.HTTP_200_OK)
-    #     except Exception as e:
-    #         return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+# For email fetching
+from rest_framework.permissions import IsAuthenticated
+from google.oauth2.credentials import Credentials
+from googleapiclient.discovery import build
 
 
+class GoogleAuthView(APIView):
     def post(self, request):
-        serializer = ReactSerializer(data=request.data)
-        if serializer.is_valid(raise_exception=True):
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-    def delete(self, request, pk):
+        token = request.data.get('token')
         try:
-            # Retrieve the object by its primary key (pk)
-            react_instance = React.objects.get(pk=pk)
-            react_instance.delete()  # Delete the instance
-            return Response({"message": "Deleted successfully"}, status=status.HTTP_204_NO_CONTENT)
-        except React.DoesNotExist:
-            return Response({"error": "Object not found"}, status=status.HTTP_404_NOT_FOUND)
+            # Verify the token
+            idinfo = id_token.verify_oauth2_token(token, requests.Request(), settings.GOOGLE_CLIENT_ID)
+
+            # ID token is valid. Get the user's Google Account ID from the decoded token.
+            google_user_id = idinfo['sub']
+            email = idinfo.get('email')
+            name = idinfo.get('name')
+
+            # Check if user exists
+            try:
+                user = User.objects.get(username=email)
+            except User.DoesNotExist:
+                # Create a new user
+                user = User.objects.create(username=email, email=email, first_name=name)
+                user.set_unusable_password()
+                user.save()
+
+            # Generate JWT token
+            refresh = RefreshToken.for_user(user)
+            return Response({
+                'refresh': str(refresh),
+                'access': str(refresh.access_token),
+            }, status=status.HTTP_200_OK)
+
+        except ValueError:
+            # Invalid token
+            return Response({'error': 'Invalid token'}, status=status.HTTP_400_BAD_REQUEST)
+
+
+class FetchEmailsView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        user = request.user
+        # Assuming you have stored the user's access token. You need to extend the GoogleAuthView to store tokens.
+
+        # For demonstration, suppose you have the access token
+        access_token = request.headers.get('Authorization').split()[1]  # Simplified
+
+        creds = Credentials(token=access_token)
+        service = build('gmail', 'v1', credentials=creds)
+
+        try:
+            results = service.users().messages().list(userId='me', labelIds=['INBOX'], maxResults=10).execute()
+            messages = results.get('messages', [])
+
+            emails = []
+            for msg in messages:
+                msg_data = service.users().messages().get(userId='me', id=msg['id'], format='full').execute()
+                # Apply your Python filtering logic here
+                # For simplicity, we'll extract the subject
+                headers = msg_data['payload']['headers']
+                subject = next(header['value'] for header in headers if header['name'] == 'Subject')
+                emails.append({'id': msg['id'], 'subject': subject})
+
+            return Response({'emails': emails}, status=status.HTTP_200_OK)
+
         except Exception as e:
-            return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-
-
-def profile(request):
-    return render(request, 'profile.html')
-
-# def indexView(request, *args, **kwargs):
-#     return render(request, "frontend/index.html")
-
+            return Response({'error': str(e)}, status=status.HTTP_400_BAD_REQUEST)
