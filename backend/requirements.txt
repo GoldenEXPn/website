@@ -9,6 +9,8 @@ djangorestframework
 
 asgiref
 djangorestframework-simplejwt
+dj-rest-auth[with_social]
+
 pytz
 sqlparse
 psycopg2-binary

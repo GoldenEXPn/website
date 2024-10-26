@@ -1,4 +1,7 @@
 .idea
 env
+.env
 /env
+/backend/.env
 pyvenv.cfg
+.DS_Store

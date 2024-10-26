@@ -15,17 +15,26 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path, include
+from django.urls import path, include, re_path
 # from django.conf.urls import url
 from api.views import *
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path("login/", LoginPage.as_view(), name="login"),
+    path("api/v1/auth/", include("dj_rest_auth.urls")),
+    re_path(r"^api/v1/auth/accounts/", include("allauth.urls")),
     path('', ReactView.as_view(), name="api"),
     path('react/', ReactView.as_view(), name='react-list-create'),
     path('react/<int:pk>/', ReactView.as_view(), name='react-detail'),
 
-
-    path('accounts/', include('allauth.urls')),
-    path('accounts/profile/', profile, name='profile'),
+    path("api/v1/auth/registration/", include("dj_rest_auth.registration.urls")),
+    path("api/v1/auth/google/", GoogleLogin.as_view(), name="google_login"),
+    path(
+        "api/v1/auth/google/callback/",
+        GoogleLoginCallback.as_view(),
+        name="google_login_callback",
+    ),
+    # path('accounts/', include('allauth.urls')),
+    # path('accounts/profile/', profile, name='profile'),
 ]
