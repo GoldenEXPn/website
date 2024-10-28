@@ -45,10 +45,14 @@ class GoogleLoginCallback(APIView):
         print("Authorization code received:", code)
 
         # Construct the token endpoint URL, replacing 'localhost' with your production domain as needed
-        token_endpoint_url = urljoin("http://localhost:8000", reverse("google_login"))
+        token_endpoint_url = urljoin("http://127.0.0.1:8000", reverse("google_login"))
         # token_endpoint_url = urljoin(settings.DOMAIN_URL, reverse("google_login"))
-        response = requests.post(url=token_endpoint_url, data={"code": code})
-        return Response(response.json(), status=status.HTTP_200_OK)
+        try:
+            response = requests.post(token_endpoint_url, data={"code": code})
+            response.raise_for_status()  # Ensure the request succeeded
+            return Response(response.json(), status=status.HTTP_200_OK)
+        except requests.RequestException as e:
+            return Response({"error": "Token exchange failed", "details": str(e)}, status=status.HTTP_502_BAD_GATEWAY)
         # try:
         #     # Post request to the token endpoint with the authorization code
         #     response = requests.post(token_endpoint_url, data={"code": code})
@@ -98,17 +102,6 @@ class ReactView(APIView):
                 return Response(output, status=status.HTTP_200_OK)
             except Exception as e:
                 return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-            
-    # def get(self, request):
-    #     try:
-    #         output = [{"email_title": output.email_title,
-    #                    "sender": output.sender,
-    #                    "content": output.content,
-    #                    "received_date": output.received_date}
-    #                   for output in React.objects.all()]
-    #         return Response(output, status=status.HTTP_200_OK)
-    #     except Exception as e:
-    #         return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 
     def post(self, request):

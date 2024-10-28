@@ -22,9 +22,11 @@ import MenuIcon from "@mui/icons-material/Menu";
 import Logo from "./Logo";
 
 import pages from "../../../pages";
-import Login from "./Login";
-import iconMap from "../../../asset/iconMap";
-
+import { iconMap } from "../../../lib/vars";
+import {
+  GOOGLE_OAUTH_CLIENT_ID,
+  GOOGLE_OAUTH_CALLBACK_URL,
+} from "../../../api.js";
 /**
  * Navigation Routing link content
  *    for the center-side navigation
@@ -32,8 +34,6 @@ import iconMap from "../../../asset/iconMap";
  */
 
 function Nav() {
-  // const routes_select_1 = [...pages.values()].filter(page => page.landing === true);
-  // const pageArray = Array.from(pages.values());
   /**
    * Hook: nav content change from the bar to the drawer
    *       based on breakpoint
@@ -44,6 +44,7 @@ function Nav() {
   const [open, setOpen] = useState(false);
   const location = useLocation();
 
+  const googleSignInUrl = `https://accounts.google.com/o/oauth2/v2/auth?redirect_uri=${GOOGLE_OAUTH_CALLBACK_URL}&prompt=consent&response_type=code&client_id=${GOOGLE_OAUTH_CLIENT_ID}&scope=openid%20email%20profile&access_type=offline`;
   // TODO: make a social page about all of the team members, provide social media link
 
   //this is the navbar format
@@ -87,7 +88,7 @@ function Nav() {
       <List>
         {Array.from(pages.values()).map((item) =>
           item.landing ? (
-            <ListItem key={item.name} disablesPadding>
+            <ListItem key={item.name}>
               <ListItemButton
                 component={NavLink}
                 to={item.path}
@@ -102,18 +103,18 @@ function Nav() {
       </List>
       <Divider variant="middle" />
       <List>
-        {pages.get("login") &&
-            <ListItem key={pages.get("login").name} disablePadding>
-              <ListItemButton
-                component={NavLink}
-                to={pages.get("login").path}
-                // activeClassName="Mui-selected"
-              >
-                <ListItemIcon>{iconMap[pages.get("login").name]}</ListItemIcon>
-                <ListItemText primary={pages.get("login").name} />
-              </ListItemButton>
-            </ListItem>
-          }
+        {
+          <ListItem key={"Sign in"} disablePadding>
+            <ListItemButton
+              component={NavLink}
+              to={googleSignInUrl}
+              // activeClassName="Mui-selected"
+            >
+              <ListItemIcon>{iconMap["Sign in"]}</ListItemIcon>
+              <ListItemText primary={"Sign in"} />
+            </ListItemButton>
+          </ListItem>
+        }
       </List>
     </Box>
   );
@@ -130,7 +131,16 @@ function Nav() {
         <>
           <Logo />
           {main_navigation}
-          <Login />
+          <div className="flex flex-1 justify-end text-center items-center space-x-2">
+            <NavLink
+              to={googleSignInUrl}
+              end
+              className="text-sm font-semibold leading-6 text-gray-900"
+            >
+              {"Sign in "}
+              {iconMap["Sign in"]}
+            </NavLink>
+          </div>
         </>
       ) : (
         <>

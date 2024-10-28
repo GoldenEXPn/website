@@ -38,7 +38,7 @@ SECRET_KEY = 'django-insecure-@n59_)ih4-5k9z#et9(^opqxxzwjm8lt#d-o5l52y^ng94is9=
 DEBUG = True
 
 
-ALLOWED_HOSTS = ['localhost']
+ALLOWED_HOSTS = ['localhost', '127.0.0.1']
 
 
 REST_FRAMEWORK = {
@@ -212,6 +212,8 @@ CORS_ALLOW_ALL_ORIGINS = True
 CORS_ALLOW_CREDENTIALS = True
 
 CORS_ALLOWED_ORIGINS = [
-    "http://localhost:8000",
+    # "http://localhost:8000",
+    # "http://127.0.0.1:8000",
+    "http://localhost:3000",
     # Add your production domain here
 ]
