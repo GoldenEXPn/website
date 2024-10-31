@@ -11,6 +11,8 @@
 # production
 /build
 
+
+/frontend/src/api.js
 # misc
 .DS_Store
 .env.local

@@ -29,7 +29,7 @@ export const handleGoogleCallback = async ({ request }) => {
       }
     }
 
-    redirect('/app')
+    redirect('/')
     throw new Response('Not Found', { status: 404 });
   };
 

@@ -32,6 +32,9 @@ pip install -r requirements.txt
 uses webpack for compile:
 webpack serve --config webpack.config.js
 
+https://www.youtube.com/watch?v=BxpA6ZavFCQ&ab_channel=KenyanEngineer
+need to put frontend into backend
+
 default compile method:
 "start": "react-scripts start --host",
 "build": "react-scripts build",
