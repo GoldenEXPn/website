@@ -2,6 +2,16 @@
     styling variables
 **/
 
+import React from "react";
+import NewspaperIcon from "@mui/icons-material/Newspaper";
+import AlternateEmailIcon from "@mui/icons-material/AlternateEmail";
+import LoginIcon from "@mui/icons-material/Login";
+
+export const iconMap = {
+    "News": React.createElement(NewspaperIcon),
+    "Contact": React.createElement(AlternateEmailIcon),
+    "Sign in": React.createElement(LoginIcon),
+};
 
 // copied from the breakpoint.scss
 export const _bp = {

@@ -48,4 +48,10 @@ Now using node v20.15.1 (npm v10.7.0)
 
 
 
+https://www.youtube.com/watch?v=BxpA6ZavFCQ&ab_channel=KenyanEngineer
+need to put frontend into backend
+
+default compile method:
+"start": "react-scripts start --host",
+"build": "react-scripts build",
 
