@@ -1,4 +1,5 @@
 const path = require("path");
+const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 module.exports = {
   entry: "./src/index.js", // Entry point for your application
@@ -8,6 +9,11 @@ module.exports = {
     publicPath: "/", // Public URL of the output directory when referenced in a browser
   },
   mode: "development", // Set the mode to 'development' for development build
+  plugins: [
+    new HtmlWebpackPlugin({
+      template: path.resolve(__dirname, 'public', 'index.html')
+    }),
+  ],
   devServer: {
     static: path.resolve(__dirname, "public"), // Serve files from 'public' directory
     port: 3000, // Dev server port
