@@ -1,13 +1,11 @@
 // import logo from './logo.svg';
 // import "./App.css";
 
-
 /*
   dependable on the local address of the rest framework (backend location to get the logic)
 
   TODO: how to refresh everytime I make a submit post action
 **/
-
 
 import React, { useEffect } from "react";
 
@@ -17,44 +15,42 @@ import {
   // Route,
 } from "react-router-dom";
 
-// import 
-
+// import
 
 import Home from "./pages/out/home/index";
-import News from "./pages/out/news/News"
+import News from "./pages/out/news/News";
 
 import FadeWrapper from "./components/wrappers/FadeWrapper";
 import LandingLayout from "./Layout/out layout/LandingLayout";
 
-import AppLayout from "./Layout/in layout/AppLayout.js"
+import AppLayout from "./Layout/in layout/AppLayout.js";
 // import AppLayout from "./Layout/in layout/AppLayout";
 
 // import Auth from "./pages/auth/Auth";
 // import DashBoard from "./pages/"
-import { handleGoogleCallback, Loader } from './loader.js';
-
-
+import { handleGoogleCallback, Loader } from "./loader.js";
 
 const App = () => {
-
   useEffect(() => {
     // Function to update CSS variables
     const updateCSSVariables = () => {
       const documentWidth = window.innerWidth;
-      document.documentElement.style.setProperty('--document-width', `${documentWidth}px`);
+      document.documentElement.style.setProperty(
+        "--document-width",
+        `${documentWidth}px`
+      );
     };
     // Initial update
     updateCSSVariables();
 
     // Update on window resize
-    window.addEventListener('resize', updateCSSVariables);
+    window.addEventListener("resize", updateCSSVariables);
 
     // Cleanup on component unmount
     return () => {
-      window.removeEventListener('resize', updateCSSVariables);
+      window.removeEventListener("resize", updateCSSVariables);
     };
   }, []);
-
 
   const router = createBrowserRouter([
     {
@@ -74,28 +70,32 @@ const App = () => {
           path: "news",
           element: (
             <FadeWrapper>
-              <News />
+              {/* <News /> */}
+              <div>yep</div>
             </FadeWrapper>
           ),
         },
       ],
     },
-    {
-        path: "/google/callback",
-        loader: handleGoogleCallback,
-        element: <Loader />,
-    },
+    // {
+    //     path: "/google/callback",
+
+    //     element: <Loader />,
+    // },
     {
       path: "/app",
+      loader: handleGoogleCallback,
       element: <AppLayout />,
-      
 
       // this should match the drawer content
       children: [
         {
           path: "",
-          element: <FadeWrapper>
-            <div>yep</div></FadeWrapper>,
+          element: (
+            <FadeWrapper>
+              <div>yep</div>
+            </FadeWrapper>
+          ),
           index: true,
         },
         {
@@ -111,17 +111,13 @@ const App = () => {
     },
   ]);
 
-  return (
-    <RouterProvider router={router} />
-  );
+  return <RouterProvider router={router} />;
 };
 
 export default App;
 
-
 // class App extends React.Component {
 //   state = {details:[], }
-
 
 //   componentDidMount() {
 //     let data;

@@ -5,3 +5,5 @@ env
 /backend/.env
 pyvenv.cfg
 .DS_Store
+
+/frontend/src/api.js

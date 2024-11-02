@@ -88,11 +88,13 @@ function Nav() {
       <List>
         {Array.from(pages.values()).map((item) =>
           item.landing ? (
-            <ListItem key={item.name}>
+            <ListItem key={item.name} disablePadding>
               <ListItemButton
                 component={NavLink}
                 to={item.path}
-                // activeClassName="Mui-selected"
+                style={({ isActive }) => ({
+                  color: isActive ? "blue" : "inherit", // Customize active style here
+                })}
               >
                 <ListItemIcon>{iconMap[item.name]}</ListItemIcon>
                 <ListItemText primary={item.name} />
@@ -103,18 +105,18 @@ function Nav() {
       </List>
       <Divider variant="middle" />
       <List>
-        {
-          <ListItem key={"Sign in"} disablePadding>
-            <ListItemButton
-              component={NavLink}
-              to={googleSignInUrl}
-              // activeClassName="Mui-selected"
-            >
-              <ListItemIcon>{iconMap["Sign in"]}</ListItemIcon>
-              <ListItemText primary={"Sign in"} />
-            </ListItemButton>
-          </ListItem>
-        }
+        <ListItem key="Sign in" disablePadding>
+          <ListItemButton
+            component={NavLink}
+            to={googleSignInUrl}
+            style={({ isActive }) => ({
+              color: isActive ? "blue" : "inherit", // Customize active style here
+            })}
+          >
+            <ListItemIcon>{iconMap["Sign in"]}</ListItemIcon>
+            <ListItemText primary="Sign in" />
+          </ListItemButton>
+        </ListItem>
       </List>
     </Box>
   );
