@@ -5,7 +5,8 @@ import React from 'react';
 import { NavLink } from "react-router-dom";
 
 
-import { GOOGLE_OAUTH_CLIENT_ID, GOOGLE_OAUTH_CALLBACK_URL} from '../../../api.js'
+const GOOGLE_OAUTH_CLIENT_ID = process.env.GOOGLE_OAUTH_CLIENT_ID;
+const GOOGLE_OAUTH_CALLBACK_URL = process.env.GOOGLE_OAUTH_CALLBACK_URL;
 
 // import iconMap from "../../../asset/iconMap";
 

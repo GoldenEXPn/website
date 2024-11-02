@@ -1,10 +1,12 @@
 .idea
 env
-.env
+process.env
 /env
 
 .env
 pyvenv.cfg
 .DS_Store
+
+api.js
 
 /frontend/src/api.js

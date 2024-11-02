@@ -1,7 +1,10 @@
 const path = require("path");
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const webpack = require('webpack');
+const dotenv = require('dotenv').config({ path: './.env' });
 
 module.exports = {
+  devtool: false,
   entry: "./src/index.js", // Entry point for your application
   output: {
     path: path.resolve(__dirname, "dist"), // Output directory
@@ -13,6 +16,9 @@ module.exports = {
     new HtmlWebpackPlugin({
       template: path.resolve(__dirname, 'public', 'index.html')
     }),
+    new webpack.DefinePlugin({
+      'process.env': JSON.stringify(dotenv.parsed) // Injects environment variables
+    })
   ],
   devServer: {
     static: path.resolve(__dirname, "public"), // Serve files from 'public' directory

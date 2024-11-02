@@ -23,10 +23,13 @@ import Logo from "./Logo";
 
 import pages from "../../../pages";
 import { iconMap } from "../../../lib/vars";
-import {
-  GOOGLE_OAUTH_CLIENT_ID,
-  GOOGLE_OAUTH_CALLBACK_URL,
-} from "../../../api.js";
+
+
+
+const GOOGLE_OAUTH_CLIENT_ID = process.env.REACT_APP_GOOGLE_OAUTH_CLIENT_ID;
+const GOOGLE_OAUTH_CALLBACK_URL = process.env.REACT_APP_GOOGLE_OAUTH_CALLBACK_URL;
+
+
 /**
  * Navigation Routing link content
  *    for the center-side navigation
@@ -38,6 +41,7 @@ function Nav() {
    * Hook: nav content change from the bar to the drawer
    *       based on breakpoint
    */
+
 
   const theme = useTheme();
   const isNavBar = useMediaQuery(theme.breakpoints.up("medium"));
@@ -105,7 +109,7 @@ function Nav() {
       </List>
       <Divider variant="middle" />
       <List>
-        <ListItem key="Sign in" disablePadding>
+        <ListItem key="Sign in" disablespadding="true">
           <ListItemButton
             component={NavLink}
             to={googleSignInUrl}

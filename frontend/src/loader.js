@@ -5,13 +5,20 @@ import { useToken } from "./components/elements/TokenContext";
 
 export const handleGoogleCallback = async ({ request }) => {
   // Exchange callback's code for JWT tokens
+  // const { token, setToken } = useToken();
 
   console.log('Handling Google Callback');
 
-  const { setToken } = useToken();
+  // const { token, setToken } = useToken();
 
   const url = new URL(request.url);
   const code = url.searchParams.get("code");
+
+  // if (token.token) {
+  //   return redirect("/app");
+  // }
+
+  // console.log(token)
 
   if (code) {
     try {
@@ -27,7 +34,7 @@ export const handleGoogleCallback = async ({ request }) => {
       );
 
       const jwtData = await response.json();
-      console.log(jwtData);
+      // console.log(jwtData);
 
       if (jwtData) {
         // Return the token so that it can be accessed in the component
@@ -44,16 +51,16 @@ export const handleGoogleCallback = async ({ request }) => {
   throw new Response("Not Found", { status: 404 });
 };
 
-export const Loader = () => {
-  const data = useLoaderData();
-  const navigate = useNavigate();
+// export const Loader = () => {
+//   const data = useLoaderData();
+//   const navigate = useNavigate();
 
-  useEffect(() => {
-    if (data?.token) {
-      // Store token or pass it to other pages, e.g., navigating with state
-      navigate("/app", { state: { token: data.token } });
-    }
-  }, [data, navigate]);
+//   useEffect(() => {
+//     if (data?.token) {
+//       // Store token or pass it to other pages, e.g., navigating with state
+//       navigate("/app", { state: { token: data.token } });
+//     }
+//   }, [data, navigate]);
 
-  return <div>Loading...</div>;
-};
+//   return <div>Loading...</div>;
+// };

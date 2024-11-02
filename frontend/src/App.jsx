@@ -22,7 +22,7 @@ import News from "./pages/out/news/News";
 
 import FadeWrapper from "./components/wrappers/FadeWrapper";
 import LandingLayout from "./Layout/out layout/LandingLayout";
-
+import { TokenProvider } from "./components/elements/TokenContext.js";
 import AppLayout from "./Layout/in layout/AppLayout.js";
 // import AppLayout from "./Layout/in layout/AppLayout";
 
@@ -85,7 +85,11 @@ const App = () => {
     {
       path: "/app",
       loader: handleGoogleCallback,
-      element: <AppLayout />,
+      element: (
+        <TokenProvider>
+          <AppLayout />
+        </TokenProvider>
+      ),
 
       // this should match the drawer content
       children: [

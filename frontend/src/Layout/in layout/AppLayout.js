@@ -10,33 +10,40 @@ import theme from "../../asset/styles/theme";
 
 import { ThemeProvider } from "@mui/material/styles";
 import CssBaseline from "@mui/material/CssBaseline";
-import { TokenProvider, useToken } from "../../components/elements/TokenContext";
+import {
+  TokenProvider,
+  useToken,
+} from "../../components/elements/TokenContext";
 
 const HomeLayout = () => {
+  const { token, setToken } = useToken();
   console.log("AppLayout rendered");
   const data = useLoaderData();
-  useToken(data)
-  // const navigate = useNavigate();
-
+  const navigate = useNavigate();
+  
+  console.log(data)
   // useEffect(() => {
   //   if (data?.token) {
-  //     // Store token or pass it to other pages, e.g., navigating with state
-  //     navigate("/app", { state: { token: data.token } });
+  //     // Set token in context
+  //     setToken(data.token);
+
+  //     // Navigate to the app with the token in state
+  //     // navigate("/app", { state: { token: data.token } });
   //   }
-  // }, [data, navigate]);
+  // }, [data, setToken]);
+  // const navigate = useNavigate();
+
 
   return (
     <div
       id="wrapper"
       className="relative flex h-screen justify-center items-center app fade-in"
     >
-      <TokenProvider>
-        <ThemeProvider theme={theme}>
-          <CssBaseline />
-          <Bars />
-          <Main />
-        </ThemeProvider>
-      </TokenProvider>
+      <ThemeProvider theme={theme}>
+        <CssBaseline />
+        <Bars />
+        <Main />
+      </ThemeProvider>
     </div>
   );
 };
