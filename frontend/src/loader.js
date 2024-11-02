@@ -3,6 +3,9 @@ import { json, redirect, useLoaderData, useNavigate } from "react-router-dom";
 import React, { useEffect } from "react";
 import { useToken } from "./components/elements/TokenContext";
 
+
+// TODO: loader issue: I will run multiple times
+
 export const handleGoogleCallback = async ({ request }) => {
   // Exchange callback's code for JWT tokens
   // const { token, setToken } = useToken();
@@ -40,8 +43,9 @@ export const handleGoogleCallback = async ({ request }) => {
         // Return the token so that it can be accessed in the component
         return json({ token: jwtData });
       } else {
+        redirect("/")
         // Redirect if token isn't found in response
-        return redirect("/");
+        return json({ 'Error': null });
       }
     } catch (err) {
       console.error(err);

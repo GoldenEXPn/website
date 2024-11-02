@@ -4,7 +4,7 @@ const webpack = require('webpack');
 const dotenv = require('dotenv').config({ path: './.env' });
 
 module.exports = {
-  devtool: false,
+  // devtool: false,
   entry: "./src/index.js", // Entry point for your application
   output: {
     path: path.resolve(__dirname, "dist"), // Output directory
@@ -24,7 +24,7 @@ module.exports = {
     static: path.resolve(__dirname, "public"), // Serve files from 'public' directory
     port: 3000, // Dev server port
     open: true, // Open the browser after the server starts
-    hot: true, // Enable Hot Module Replacement (HMR)
+    // hot: true, // Enable Hot Module Replacement (HMR)
     historyApiFallback: true,
   },
   module: {
