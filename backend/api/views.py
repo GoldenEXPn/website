@@ -23,6 +23,13 @@ from google.oauth2.credentials import Credentials
 from googleapiclient.discovery import build
 
 
+class TestView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        return Response({'message': 'CORs Working!'}, status=status.HTTP_200_OK)
+
+
 class GoogleAuthView(APIView):
     def post(self, request):
         token = request.data.get('token')

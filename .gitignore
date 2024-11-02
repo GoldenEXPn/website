@@ -3,3 +3,5 @@ env
 /env
 pyvenv.cfg
 .DS_Store
+/frontend/.env
+/backend/.env

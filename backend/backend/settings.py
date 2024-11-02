@@ -30,7 +30,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-@n59_)ih4-5k9z#et9(^opqxxzwjm8lt#d-o5l52y^ng94is9='
+SECRET_KEY = os.getenv("SECRET_KEY")
+if not SECRET_KEY:
+    raise ValueError("Please provide SECRET_KEY in .env file")
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -62,17 +64,17 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    # Sub-apps
-    'api',
     # DRF
     'rest_framework',
     'corsheaders',
     'rest_framework_simplejwt',
+    # Sub-apps
+    'api',
 ]
 
 MIDDLEWARE = [
-    # rest middleware
-    'corsheaders.middleware.CorsMiddleware'
+    # rest middleware (must be placed at first)
+    'corsheaders.middleware.CorsMiddleware',
     # default middleware
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -133,11 +135,10 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-#All Auth providers
-AUTHENTICATION_BACKENDS = {
+# Maybe not useful
+AUTHENTICATION_BACKENDS = [
     'django.contrib.auth.backends.ModelBackend',
-    'allauth.account.auth_backends.AuthenticationBackend',
-}
+]
 
 SOCIALACCOUNT_PROVIDERS = {
     'google': {
@@ -178,4 +179,5 @@ STATIC_URL = 'static/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 CORS_ALLOW_ALL_ORIGINS = False
+
 CORS_ALLOWED_ORIGINS = ['http://localhost:3000',]
