@@ -5,22 +5,16 @@ import { useLoaderData, useNavigate } from "react-router-dom";
 import Main from "./Main";
 import Bars from "./Bars";
 import theme from "../../asset/styles/theme";
-
-// import Menu from "./Menu";
-
 import { ThemeProvider } from "@mui/material/styles";
 import CssBaseline from "@mui/material/CssBaseline";
-import {
-  TokenProvider,
-  useToken,
-} from "../../components/elements/TokenContext";
+import { useToken } from "../../components/elements/TokenContext";
 
 const HomeLayout = () => {
   const { token, setToken } = useToken();
   console.log("AppLayout rendered");
   const data = useLoaderData();
   const navigate = useNavigate();
-  
+
   console.log(data)
   // useEffect(() => {
   //   if (data?.token) {

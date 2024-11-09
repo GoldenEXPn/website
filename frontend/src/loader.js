@@ -3,22 +3,14 @@ import { json, redirect, useLoaderData, useNavigate } from "react-router-dom";
 import React, { useEffect } from "react";
 import { useToken } from "./components/elements/TokenContext";
 
+
+// Exchange callback's code for JWT tokens
 export const handleGoogleCallback = async ({ request }) => {
-  // Exchange callback's code for JWT tokens
-  // const { token, setToken } = useToken();
 
   console.log('Handling Google Callback');
 
-  // const { token, setToken } = useToken();
-
   const url = new URL(request.url);
   const code = url.searchParams.get("code");
-
-  // if (token.token) {
-  //   return redirect("/app");
-  // }
-
-  // console.log(token)
 
   if (code) {
     try {
@@ -34,13 +26,12 @@ export const handleGoogleCallback = async ({ request }) => {
       );
 
       const jwtData = await response.json();
-      // console.log(jwtData);
 
       if (jwtData) {
-        // Return the token so that it can be accessed in the component
+        // Return token to be accessed by userLoaderData()
         return json({ token: jwtData });
       } else {
-        // Redirect if token isn't found in response
+        // Redirect to home page if no token is returned
         return redirect("/");
       }
     } catch (err) {
@@ -51,16 +42,23 @@ export const handleGoogleCallback = async ({ request }) => {
   throw new Response("Not Found", { status: 404 });
 };
 
-// export const Loader = () => {
-//   const data = useLoaderData();
-//   const navigate = useNavigate();
+export const Loader = () => {
+  const data = useLoaderData();
+  const navigate = useNavigate();
+  const { setToken } = useToken();
 
-//   useEffect(() => {
-//     if (data?.token) {
-//       // Store token or pass it to other pages, e.g., navigating with state
-//       navigate("/app", { state: { token: data.token } });
-//     }
-//   }, [data, navigate]);
+  useEffect(() => {
+    if (data?.token) {
+      // Store token in context
+      setToken(data.token);
 
-//   return <div>Loading...</div>;
-// };
+      // Navigate to the app
+      navigate("/app");
+    } else{
+      // Redirect if no token
+        navigate("/");
+    }
+  }, [data, navigate, setToken]);
+
+  return <div>Loading...</div>;
+};

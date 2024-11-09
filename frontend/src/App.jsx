@@ -83,6 +83,15 @@ const App = () => {
     //     element: <Loader />,
     // },
     {
+      path: "/google/callback",
+      loader: handleGoogleCallback,
+      element:(
+          <TokenProvider>
+            <Loader />
+          </TokenProvider>
+      )
+    },
+    {
       path: "/app",
       loader: handleGoogleCallback,
       element: (
@@ -119,56 +128,3 @@ const App = () => {
 };
 
 export default App;
-
-// class App extends React.Component {
-//   state = {details:[], }
-
-//   componentDidMount() {
-//     let data;
-//     axios.get(address)
-//       .then(res => {
-//         data = res.data;
-//         this.setState({
-//           details: data
-//         });
-//       }).catch(err => {})
-
-//       const updateCSSVariables = () => {
-//         const documentWidth = window.innerWidth;
-//         document.documentElement.style.setProperty('--document-width', `${documentWidth}px`);
-//       };
-//       updateCSSVariables();
-
-//       window.addEventListener('resize', updateCSSVariables);
-
-//     // Cleanup on component unmount
-//     this.cleanup = () => {
-//       window.removeEventListener('resize', updateCSSVariables);
-//     };
-//   }
-
-//   componentWillUnmount() {
-//     // Cleanup event listener
-//     if (this.cleanup) this.cleanup();
-//   }
-//   render() {
-//     return (
-//       <>
-//         <AppRouter />
-//         <div>
-//           <h1>Testing: React & Django Integration</h1>
-//           {this.state.details.length > 0 ? (
-//             this.state.details.map((output, index) => (
-//               <div key={index}>
-//                 <h3>{"Title: " + output.email_title}</h3>
-//                 <p>{"Content: " + output.content}</p>
-//               </div>
-//             ))
-//           ) : (
-//             <p>No data available</p>
-//           )}
-//         </div>
-//       </>
-//     )
-//   }
-// }
