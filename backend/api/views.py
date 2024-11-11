@@ -1,142 +1,137 @@
+import jwt
 import requests
-from django.urls import reverse
-from django.shortcuts import render
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
-from django.views import View
-
-
-from json import JSONDecodeError
-
-from .models import *
-from .serializer import *
-from .templates import *
-from .utils import *
-
-from allauth.socialaccount.providers.google.views import GoogleOAuth2Adapter
-from allauth.socialaccount.providers.oauth2.client import OAuth2Client
-from dj_rest_auth.registration.views import SocialLoginView
-
 from django.conf import settings
+from .models import GoogleUser
+from google.oauth2.credentials import Credentials
+from googleapiclient.discovery import build
+from rest_framework.permissions import IsAuthenticated
+from .authentications import JWTAuthentication
+from google.auth.transport.requests import Request
 
-from urllib.parse import urljoin
+import logging
+logger = logging.getLogger(__name__)
 
 
-class GoogleLogin(SocialLoginView):
-    adapter_class = GoogleOAuth2Adapter
-    callback_url = settings.GOOGLE_OAUTH_CALLBACK_URL
-    client_class = OAuth2Client
+class GoogleAuthView(APIView):
+    def post(self, request):
+        code = request.data.get('code')
+        print(code)
+        if not code:
+            return Response({'error': 'Authorization code not provided.'}, status=status.HTTP_400_BAD_REQUEST)
 
+        # Exchange code for access token and refresh token
+        token_url = 'https://oauth2.googleapis.com/token'
+        data = {
+            'code': code,
+            'client_id': settings.GOOGLE_CLIENT_ID,
+            'client_secret': settings.GOOGLE_CLIENT_SECRET,
+            'redirect_uri': settings.GOOGLE_OAUTH_CALLBACK_URL,  # Adjustable in .env
+            'grant_type': 'authorization_code',
+        }
 
-class GoogleLoginCallback(APIView):
-    def get(self, request, *args, **kwargs):
-        """
-        If you are building a fullstack application (eq. with React app next to Django)
-        you can place this endpoint in your frontend application to receive
-        the JWT tokens there - and store them in the state
-        """
+        # Send POST request to Google's token endpoint
+        r = requests.post(token_url, data=data)
+        print(r)
 
-        code = request.GET.get("code")
-        
-        # Check if the 'code' parameter is present in the request
-        if code is None:
-            return Response(status=status.HTTP_400_BAD_REQUEST)
-        print("Authorization code received:", code)
-
-        # Construct the token endpoint URL, replacing 'localhost' with your production domain as needed
-        token_endpoint_url = urljoin("http://127.0.0.1:8000", reverse("google_login"))
-        # token_endpoint_url = urljoin(settings.DOMAIN_URL, reverse("google_login"))
         try:
-            response = requests.post(token_endpoint_url, data={"code": code})
-            response.raise_for_status()  # Ensure the request succeeded
-            return Response(response.json(), status=status.HTTP_200_OK)
-        except requests.RequestException as e:
-            return Response({"error": "Token exchange failed", "details": str(e)}, status=status.HTTP_502_BAD_GATEWAY)
-        # try:
-        #     # Post request to the token endpoint with the authorization code
-        #     response = requests.post(token_endpoint_url, data={"code": code})
-        #     response.raise_for_status()  # Raise an error if the response status is not 200
+            token_data = r.json()
+        except ValueError:
+            logger.error(f'Non-JSON response from Google: {r.text}')
+            return Response({'error': 'Failed to obtain access token from Google.'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
-        #     # Attempt to parse JSON response; if it fails, handle the error
-        #     # try:
-        #     #     json_data = response.json()
-        #     # except JSONDecodeError:
-        #     #     return Response(
-        #     #         {"error": "Invalid JSON in response", "details": response.text},
-        #     #         status=status.HTTP_500_INTERNAL_SERVER_ERROR
-        #     #     )
+        if 'error' in token_data:
+            error_description = token_data.get('error_description', 'Failed to obtain access token from Google.')
+            logger.error(f"Google OAuth error: {token_data['error']}: {error_description}")
+            return Response({'error': error_description}, status=status.HTTP_400_BAD_REQUEST)
 
-        #     return Response(response.json(), status=status.HTTP_200_OK)
+        access_token = token_data.get('access_token')
+        refresh_token = token_data.get('refresh_token')
+        id_token = token_data.get('id_token')  # JWT token containing user info
+        expires_in = token_data.get('expires_in')
 
-        # except requests.exceptions.RequestException as e:
-        #     # Handle request errors like connection issues or timeout
-        #     return Response(
-        #         {"error": "Failed to connect to the token endpoint", "details": str(e)},
-        #         status=status.HTTP_502_BAD_GATEWAY
-        #     )
-    
-    
-# class ReactView(APIView):
-#     # I don't know why when I put this line of code I am able to access
-#     # to the html form of the post in rest frame work
-#     serializer_class = ReactSerializer
+        # Decode the ID token to get user information
+        try:
+            id_info = jwt.decode(id_token, options={"verify_signature": False})
+            email = id_info.get('email')
 
-#     def get(self, request, pk=None):
-#         if pk is not None:
-#             # Handle the case where a specific object is requested
-#             try:
-#                 react_instance = React.objects.get(pk=pk)
-#                 serializer = ReactSerializer(react_instance)
-#                 return Response(serializer.data, status=status.HTTP_200_OK)
-#             except React.DoesNotExist:
-#                 return Response({"error": "Object not found"}, status=status.HTTP_404_NOT_FOUND)
-#         else:
-#             # Handle the case where all objects are listed
-#             try:
-#                 output = [{"email_title": output.email_title,
-#                            "sender": output.sender,
-#                            "content": output.content,
-#                            "received_date": output.received_date}
-#                           for output in React.objects.all()]
-#                 return Response(output, status=status.HTTP_200_OK)
-#             except Exception as e:
-#                 return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+            # Save or update user in database
+            user, created = GoogleUser.objects.get_or_create(email=email)
+            user.access_token = access_token
+            user.refresh_token = refresh_token
+            user.token_expires_in = expires_in
+            user.save()
+
+            # Generate JWT token
+            jwt_payload = {
+                'email': email,
+                # 'token': access_token
+            }
+            jwt_token = jwt.encode(jwt_payload, settings.JWT_SECRET_KEY, algorithm='HS256')
+
+            return Response({'token': jwt_token}, status=status.HTTP_200_OK)
+
+        except Exception as e:
+            print(e)
+            return Response({'error': 'Failed to decode ID token.'}, status=status.HTTP_400_BAD_REQUEST)
 
 
-#     def post(self, request):
-#         serializer = ReactSerializer(data=request.data)
-#         if serializer.is_valid(raise_exception=True):
-#             serializer.save()
-#             return Response(serializer.data, status=status.HTTP_201_CREATED)
-#         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+class GetUserEmailsView(APIView):
+    authentication_classes = [JWTAuthentication]
+    permission_classes = [IsAuthenticated]
 
-#     def delete(self, request, pk):
-#         try:
-#             # Retrieve the object by its primary key (pk)
-#             react_instance = React.objects.get(pk=pk)
-#             react_instance.delete()  # Delete the instance
-#             return Response({"message": "Deleted successfully"}, status=status.HTTP_204_NO_CONTENT)
-#         except React.DoesNotExist:
-#             return Response({"error": "Object not found"}, status=status.HTTP_404_NOT_FOUND)
-#         except Exception as e:
-#             return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+    def get(self, request):
+        k = int(request.query_params.get('k', 10))  # Default to 10 recent emails
 
+        user = request.user
 
-class LoginPage(View):
-    def get(self, request, *args, **kwargs):
-        
-        print(settings.GOOGLE_OAUTH_CLIENT_ID)
-        
-        return render(
-            request,
-            "profile.html",
-            {
-                "google_callback_uri": settings.GOOGLE_OAUTH_CALLBACK_URL,
-                "google_client_id": settings.GOOGLE_OAUTH_CLIENT_ID,
-            },
+        # Refresh the access token if necessary
+        credentials = Credentials(
+            token=user.access_token,
+            refresh_token=user.refresh_token,
+            token_uri='https://oauth2.googleapis.com/token',
+            client_id=settings.GOOGLE_CLIENT_ID,
+            client_secret=settings.GOOGLE_CLIENT_SECRET,
+            scopes=['https://www.googleapis.com/auth/gmail.readonly'],
         )
 
-# def indexView(request, *args, **kwargs):
-#     return render(request, "frontend/index.html")
+        # Update token if expired but got refresh token
+        if credentials.expired and credentials.refresh_token:
+            credentials.refresh(Request())
+            user.access_token = credentials.token
+            user.save()
+
+        try:
+            service = build('gmail', 'v1', credentials=credentials)
+
+            # Fetch the list of messages
+            messages_result = service.users().messages().list(userId='me', maxResults=k).execute()
+            messages = messages_result.get('messages', [])
+
+            emails = []
+
+            for message in messages:
+                msg = service.users().messages().get(userId='me', id=message['id'], format='full').execute()
+
+                headers = msg.get('payload', {}).get('headers', [])
+                subject = next((h['value'] for h in headers if h['name'] == 'Subject'), '')
+                from_email = next((h['value'] for h in headers if h['name'] == 'From'), '')
+                snippet = msg.get('snippet', '')
+
+                email_data = {
+                    'id': message['id'],
+                    'threadId': msg.get('threadId'),
+                    'subject': subject,
+                    'from': from_email,
+                    'snippet': snippet,
+                }
+                emails.append(email_data)
+
+            return Response({'emails': emails}, status=status.HTTP_200_OK)
+
+        except Exception as e:
+            logger.error(f'Error fetching emails: {e}')
+            return Response({'error': 'Failed to fetch emails.'}, status=status.HTTP_400_BAD_REQUEST)
 

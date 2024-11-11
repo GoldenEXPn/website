@@ -1,45 +1,48 @@
-//TODO: should I combine both main?
-//TODO: should I combine themeprovider?
-import React, { useEffect } from "react";
-import { useLoaderData, useNavigate } from "react-router-dom";
-import Main from "./Main";
-import Bars from "./Bars";
-import theme from "../../asset/styles/theme";
-import { ThemeProvider } from "@mui/material/styles";
-import CssBaseline from "@mui/material/CssBaseline";
+// AppLayout.js
+
+import React, { useEffect, useState } from "react";
 import { useToken } from "../../components/elements/TokenContext";
 
-const HomeLayout = () => {
-  const { token, setToken } = useToken();
-  console.log("AppLayout rendered");
-  const data = useLoaderData();
-  const navigate = useNavigate();
+const AppLayout = () => {
+  const { token } = useToken();
+  const [emails, setEmails] = useState([]);
 
-  console.log(data)
-  // useEffect(() => {
-  //   if (data?.token) {
-  //     // Set token in context
-  //     setToken(data.token);
-
-  //     // Navigate to the app with the token in state
-  //     // navigate("/app", { state: { token: data.token } });
-  //   }
-  // }, [data, setToken]);
-  // const navigate = useNavigate();
-
+  useEffect(() => {
+    if (token) {
+      // Fetch the user's emails
+      fetch("http://localhost:8000/api/get-user-emails/?k=10", {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          if (data.emails) {
+            setEmails(data.emails);
+          } else {
+            console.error("Error fetching emails:", data.error);
+          }
+        })
+        .catch((error) => {
+          console.error("Error fetching emails:", error);
+        });
+    }
+  }, [token]);
 
   return (
-    <div
-      id="wrapper"
-      className="relative flex h-screen justify-center items-center app fade-in"
-    >
-      <ThemeProvider theme={theme}>
-        <CssBaseline />
-        <Bars />
-        <Main />
-      </ThemeProvider>
+    <div>
+      <h1>Your Emails</h1>
+      {emails.map((email) => (
+        <div key={email.id}>
+          <h2>{email.subject}</h2>
+          <p>From: {email.from}</p>
+          <p>{email.snippet}</p>
+          <hr />
+        </div>
+      ))}
     </div>
   );
 };
 
-export default HomeLayout;
+export default AppLayout;

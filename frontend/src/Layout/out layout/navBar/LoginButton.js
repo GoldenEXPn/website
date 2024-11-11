@@ -2,11 +2,9 @@
 // import { gsap } from "gsap";
 import React from 'react';
 
-import { NavLink } from "react-router-dom";
 
-
-const GOOGLE_OAUTH_CLIENT_ID = process.env.GOOGLE_OAUTH_CLIENT_ID;
-const GOOGLE_OAUTH_CALLBACK_URL = process.env.GOOGLE_OAUTH_CALLBACK_URL;
+const GOOGLE_OAUTH_CLIENT_ID = process.env.REACT_APP_GOOGLE_OAUTH_CLIENT_ID;
+const GOOGLE_OAUTH_CALLBACK_URL = process.env.REACT_APP_GOOGLE_OAUTH_CALLBACK_URL;
 
 // import iconMap from "../../../asset/iconMap";
 
@@ -21,18 +19,23 @@ import { iconMap } from '../../../lib/vars.js';
 
 
 const LoginButton = () => {
-  const googleSignInUrl = `https://accounts.google.com/o/oauth2/v2/auth?redirect_uri=${GOOGLE_OAUTH_CALLBACK_URL}&prompt=consent&response_type=code&client_id=${GOOGLE_OAUTH_CLIENT_ID}&scope=openid%20email%20profile&access_type=offline`;
+  const googleSignInUrl = `https://accounts.google.com/o/oauth2/v2/auth?` +
+  `client_id=${encodeURIComponent(GOOGLE_OAUTH_CLIENT_ID)}` +
+  `&redirect_uri=${encodeURIComponent(GOOGLE_OAUTH_CALLBACK_URL)}` +
+  `&response_type=code` +
+  `&scope=${encodeURIComponent('https://www.googleapis.com/auth/gmail.readonly')}` +
+  `&access_type=offline` +
+  `&prompt=consent`;
+
   return (
     <div className="flex flex-1 justify-end text-center items-center space-x-2">
-      <NavLink
-        to={googleSignInUrl}
-        end
-        className=
-          "text-sm font-semibold leading-6 text-gray-900" 
-      >
-        {"Sign in "}
-        {iconMap['Sign in']}
-      </NavLink>
+        <a
+            href={googleSignInUrl}
+            className="text-sm font-semibold leading-6 text-gray-900"
+        >
+            {"Sign in "}
+            {iconMap['Sign in']}
+        </a>
     </div>
   );
 };

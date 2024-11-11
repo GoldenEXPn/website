@@ -12,6 +12,8 @@ export const handleGoogleCallback = async ({ request }) => {
   const url = new URL(request.url);
   const code = url.searchParams.get("code");
 
+  console.log('Authorization code:', code);
+
   if (code) {
     try {
       const response = await fetch(
@@ -25,9 +27,14 @@ export const handleGoogleCallback = async ({ request }) => {
         }
       );
 
-      const jwtData = await response.json();
+      if (!response.ok) {
+        throw new Error(`Failed to exchange code for token: ${response.status}`);
+      }
 
-      if (jwtData) {
+      const jwtData = await response.json();
+      console.log('JWT data:', jwtData);
+
+      if (jwtData.token) {
         // Return token to be accessed by userLoaderData()
         return json({ token: jwtData });
       } else {
@@ -38,9 +45,12 @@ export const handleGoogleCallback = async ({ request }) => {
       console.error(err);
       throw new Response("Bad request", { status: 400 });
     }
+  } else{
+   console.error('Authorization code not in URL');
+   throw new Response("Bad request", { status: 404 });
   }
-  throw new Response("Not Found", { status: 404 });
 };
+
 
 export const Loader = () => {
   const data = useLoaderData();
@@ -51,7 +61,6 @@ export const Loader = () => {
     if (data?.token) {
       // Store token in context
       setToken(data.token);
-
       // Navigate to the app
       navigate("/app");
     } else{
