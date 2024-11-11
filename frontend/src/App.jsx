@@ -83,11 +83,6 @@ const App = () => {
         },
       ],
     },
-    // {
-    //     path: "/google/callback",
-
-    //     element: <Loader />,
-    // },
     {
       path: "/app",
       loader: handleGoogleCallback,

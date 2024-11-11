@@ -20,21 +20,10 @@ from django.urls import path, include, re_path
 from api.views import *
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
-    path("login/", LoginPage.as_view(), name="login"),
-    path("api/v1/auth/", include("dj_rest_auth.urls")),
-    re_path(r"^api/v1/auth/accounts/", include("allauth.urls")),
-    # path('', ReactView.as_view(), name="api"),
-    # path('react/', ReactView.as_view(), name='react-list-create'),
-    # path('react/<int:pk>/', ReactView.as_view(), name='react-detail'),
+    path('admin/', admin.site.urls),  # Admin panel path
+    path("login/", LoginPage.as_view(), name="login"),  # Login page for the frontend
+    path('accounts/', include('allauth.urls')),  # Allauth for user authentication
 
-    path("api/v1/auth/registration/", include("dj_rest_auth.registration.urls")),
-    path("api/v1/auth/google/", GoogleLogin.as_view(), name="google_login"),
-    path(
-        "api/v1/auth/google/callback/",
-        GoogleLoginCallback.as_view(),
-        name="google_login_callback",
-    ),
-    path('accounts/', include('allauth.urls')),
-    # path('accounts/profile/', profile, name='profile'),
+    # Include the API app's URLs under /api/v1/
+    path("api/v1/", include("api.urls")),  # API routes handled in api/urls.py
 ]

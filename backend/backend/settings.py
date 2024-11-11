@@ -161,6 +161,7 @@ AUTHENTICATION_BACKENDS = [
     'allauth.account.auth_backends.AuthenticationBackend',
 ]
 
+
 SITE_ID = 1
 
 SOCIALACCOUNT_EMAIL_AUTHENTICATION = True
@@ -211,9 +212,11 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 CORS_ALLOW_ALL_ORIGINS = True
 CORS_ALLOW_CREDENTIALS = True
 
-CORS_ALLOWED_ORIGINS = [
-    # "http://localhost:8000",
+CORS_ALLOWED_ORIGINS = [ 
+    "http://localhost:8000",
     "http://127.0.0.1:8000",
     "http://localhost:3000",
     # Add your production domain here
 ]
+
+# CSRF_TRUSTED_ORIGINS = ['http://127.0.0.1:8000']
