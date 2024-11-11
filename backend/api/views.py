@@ -22,6 +22,9 @@ from django.conf import settings
 
 from urllib.parse import urljoin
 
+        #TODO: store this response in backend, 
+        #TODO: add additional method to read, refresh, check token
+        #TODO: get email information based on the token
 
 class GoogleLogin(SocialLoginView):
     adapter_class = GoogleOAuth2Adapter
@@ -53,6 +56,8 @@ class GoogleLoginCallback(APIView):
             return Response(response.json(), status=status.HTTP_200_OK)
         except requests.RequestException as e:
             return Response({"error": "Token exchange failed", "details": str(e)}, status=status.HTTP_502_BAD_GATEWAY)
+        
+        
         # try:
         #     # Post request to the token endpoint with the authorization code
         #     response = requests.post(token_endpoint_url, data={"code": code})
@@ -76,51 +81,6 @@ class GoogleLoginCallback(APIView):
         #         status=status.HTTP_502_BAD_GATEWAY
         #     )
     
-    
-# class ReactView(APIView):
-#     # I don't know why when I put this line of code I am able to access
-#     # to the html form of the post in rest frame work
-#     serializer_class = ReactSerializer
-
-#     def get(self, request, pk=None):
-#         if pk is not None:
-#             # Handle the case where a specific object is requested
-#             try:
-#                 react_instance = React.objects.get(pk=pk)
-#                 serializer = ReactSerializer(react_instance)
-#                 return Response(serializer.data, status=status.HTTP_200_OK)
-#             except React.DoesNotExist:
-#                 return Response({"error": "Object not found"}, status=status.HTTP_404_NOT_FOUND)
-#         else:
-#             # Handle the case where all objects are listed
-#             try:
-#                 output = [{"email_title": output.email_title,
-#                            "sender": output.sender,
-#                            "content": output.content,
-#                            "received_date": output.received_date}
-#                           for output in React.objects.all()]
-#                 return Response(output, status=status.HTTP_200_OK)
-#             except Exception as e:
-#                 return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-
-
-#     def post(self, request):
-#         serializer = ReactSerializer(data=request.data)
-#         if serializer.is_valid(raise_exception=True):
-#             serializer.save()
-#             return Response(serializer.data, status=status.HTTP_201_CREATED)
-#         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-#     def delete(self, request, pk):
-#         try:
-#             # Retrieve the object by its primary key (pk)
-#             react_instance = React.objects.get(pk=pk)
-#             react_instance.delete()  # Delete the instance
-#             return Response({"message": "Deleted successfully"}, status=status.HTTP_204_NO_CONTENT)
-#         except React.DoesNotExist:
-#             return Response({"error": "Object not found"}, status=status.HTTP_404_NOT_FOUND)
-#         except Exception as e:
-#             return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 
 class LoginPage(View):

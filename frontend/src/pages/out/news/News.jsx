@@ -1,4 +1,3 @@
-import React from "react";
 
 import Post from "../../../components/elements/Post";
 import PostCollection from "../../../components/elements/PostCollection";
