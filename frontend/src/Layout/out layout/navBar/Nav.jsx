@@ -50,6 +50,7 @@ function Nav() {
   const googleSignInUrl = `https://accounts.google.com/o/oauth2/v2/auth?redirect_uri=${GOOGLE_OAUTH_CALLBACK_URL}&prompt=consent&response_type=code&client_id=${GOOGLE_OAUTH_CLIENT_ID}&scope=openid%20email%20profile&access_type=offline`;
   // TODO: make a social page about all of the team members, provide social media link
 
+
   //this is the navbar format
   const main_navigation = (
     <div className={isNavBar ? "flex gap-x-12" : ""}>
@@ -142,7 +143,7 @@ function Nav() {
               end
               className="text-sm font-semibold leading-6 text-gray-900"
             >
-              {"Sign in "}
+              
               {iconMap["Sign in"]}
             </NavLink>
           </div>

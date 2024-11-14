@@ -7,9 +7,6 @@ process.env
 pyvenv.cfg
 .DS_Store
 
-api.js
-
-/frontend/src/api.js
 
 # See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
 

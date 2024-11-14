@@ -17,13 +17,11 @@ from django.views import View
 
 from json import JSONDecodeError
 
+# https://dj-rest-auth.readthedocs.io/en/latest/api_endpoints.html
 # from .models import *
 # from .serializer import *
 # from .templates import *
 # from .utils import *
-
-
-
 
 
         #TODO: store this response in backend, 
@@ -56,7 +54,7 @@ class GoogleLoginCallback(APIView):
         token_endpoint_url = urljoin("http://127.0.0.1:8000", reverse("google_login"))
         
         
-        # print(token_endpoint_url)
+        print(token_endpoint_url)
         
         
         # This is basically logging in using the token
