@@ -16,6 +16,7 @@ from rest_framework import status
 from django.views import View
 
 from json import JSONDecodeError
+from rest_framework.permissions import IsAuthenticated
 
 # https://dj-rest-auth.readthedocs.io/en/latest/api_endpoints.html
 # from .models import *
@@ -52,14 +53,10 @@ class GoogleLoginCallback(APIView):
         # reverse login does not work
         # token_endpoint_url = urljoin("http://127.0.0.1:8000", reverse("google_login"))
         token_endpoint_url = urljoin("http://127.0.0.1:8000", reverse("google_login"))
-        
-        
+
         print(token_endpoint_url)
-        
-        
-        # This is basically logging in using the token
-        # token_endpoint_url = urljoin(settings.DOMAIN_URL, reverse("google_login"))
-        # this try to login
+
+        # Logging in
         try:
             response = requests.post(token_endpoint_url, data={"code": code})
             response.raise_for_status()  # Ensure the request succeeded
@@ -67,13 +64,9 @@ class GoogleLoginCallback(APIView):
         except requests.RequestException as e:
             return Response({"error": "Token exchange failed", "details": str(e)}, status=status.HTTP_502_BAD_GATEWAY)
         
-        
-    
 class LoginPage(View):
     def get(self, request, *args, **kwargs):
-        
-        print(settings.GOOGLE_OAUTH_CLIENT_ID)
-        
+
         return render(
             request,
             "profile.html",
@@ -83,6 +76,43 @@ class LoginPage(View):
             },
         )
 
+class TokenRefresh(APIView):
+
+    def post(self, request, *args, **kwargs):
+        refresh_token = request.data.get('refresh')
+
+        if not refresh_token:
+            return Response({"error": "No refresh token provided"}, status=status.HTTP_400_BAD_REQUEST)
+
+        # Google's token endpoint for refreshing tokens
+        token_url = "https://oauth2.googleapis.com/token"
+
+        payload = {
+            "client_id": settings.GOOGLE_OAUTH_CLIENT_ID,
+            "client_secret": settings.GOOGLE_OAUTH_CLIENT_SECRET,
+            "refresh_token": refresh_token,
+            "grant_type": "refresh_token",
+        }
+
+        try:
+            # Make a request to Google OAuth2 API to refresh the access token
+            response = requests.post(token_url, data=payload)
+            print(response)
+            # If successful, response from Google will include a new access token
+            response_data = response.json()
+            print(response_data)
+            if response.status_code == 200 and 'access_token' in response_data:
+                # Return the new access token to the client
+                return Response({
+                    'access_token': response_data['access_token'],
+                    'expires_in': response_data['expires_in']
+                }, status=status.HTTP_200_OK)
+            else:
+                return Response({'error': 'Failed to refresh token'}, status=status.HTTP_400_BAD_REQUEST)
+
+        except requests.exceptions.RequestException as e:
+            # Catch any error from the request
+            return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 # def indexView(request, *args, **kwargs):
 #     return render(request, "frontend/index.html")
 

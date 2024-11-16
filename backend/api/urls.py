@@ -10,4 +10,6 @@ urlpatterns = [
     path("auth/registration/", include("dj_rest_auth.registration.urls")),
     path("auth/google/", GoogleLogin.as_view(), name="google_login"),
     path("auth/google/callback/", GoogleLoginCallback.as_view(), name="google_login_callback"),
+    path("auth/token/refresh", TokenRefresh.as_view(), name="refresh_token" )
 ]
+

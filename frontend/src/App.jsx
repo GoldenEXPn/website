@@ -28,13 +28,11 @@ import News from "./pages/out/news/News.jsx";
 
 import FadeWrapper from "./components/wrappers/FadeWrapper.jsx";
 import LandingLayout from "./Layout/out layout/LandingLayout.jsx";
-import { TokenProvider } from "./components/hook/TokenContext";
-import AppLayout from "./Layout/in layout/AppLayout.jsx";
-// import AppLayout from "./Layout/in layout/AppLayout";
+import AppLayout from "./Layout/in layout/AppLayout";
 
 // import Auth from "./pages/auth/Auth";
 // import DashBoard from "./pages/"
-import { handleGoogleCallback} from "./loader.jsx";
+import { GoogleCallback, handleGoogleCallback} from "./loader.jsx";
 
 const App = () => {
   useEffect(() => {
@@ -84,12 +82,14 @@ const App = () => {
       ],
     },
     {
-      path: "/app",
+      path: "/auth/callback",
+      element: <GoogleCallback />,  // Display something while processing the callback
       loader: handleGoogleCallback,
+    },
+    {
+      path: "/app",
       element: (
-        <TokenProvider>
           <AppLayout />
-        </TokenProvider>
       ),
 
       // this should match the drawer content
