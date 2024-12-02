@@ -39,7 +39,6 @@ app.secret_key = os.getenv("GOOGLE_OAUTH_CLIENT_SECRET")
 GOOGLE_CLIENT_ID = os.getenv("GOOGLE_OAUTH_CLIENT_ID")
 client_secrets_file = os.path.join(pathlib.Path(__file__).parent, "client_secret.json")
 
-
 CORS(app)
 
 def login_is_required(function):
@@ -152,10 +151,10 @@ def protected_area():
 def fetch_emails(): 
     
     '''
-        Get the state value from the stored session and verify it through Google oauth,
-        Then this generate credential for accessing user and api use based on the granted scope.
-        
-        This contains both method of flask default session storage and the cache storage
+        Requires user credential in the session. 
+        If there is no credential, user is not verified.
+        Then, uses the credential to get the email service,
+        The number of email is determined by maxResults.
     '''
     
     if 'credentials' not in flask.session:
@@ -177,6 +176,8 @@ def fetch_emails():
         messages = results.get("messages", [])
 
         emails = []
+        
+        # determine what data to get and cleaning the body using clean_email_body helper function
         for message in messages:
             msg = service.users().messages().get(userId="me", id=message["id"]).execute()
             payload = msg.get("payload", {})
@@ -188,7 +189,6 @@ def fetch_emails():
             # print(body)
             email = {
                 "id": msg["id"],
-                # "snippet": msg["snippet"],
             }
 
             for header in headers:

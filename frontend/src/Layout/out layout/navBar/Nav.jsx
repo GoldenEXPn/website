@@ -24,11 +24,11 @@ import pages from "../../../pages";
 import { iconMap } from "../../../lib/vars";
 
 
-
 const GOOGLE_OAUTH_CLIENT_ID = import.meta.env.VITE_GOOGLE_OAUTH_CLIENT_ID;
 const GOOGLE_OAUTH_CALLBACK_URL = import.meta.env.VITE_GOOGLE_OAUTH_CALLBACK_URL;
 
-
+// const googleSignInUrl = `https://accounts.google.com/o/oauth2/v2/auth?redirect_uri=${GOOGLE_OAUTH_CALLBACK_URL}&prompt=consent&response_type=code&client_id=${GOOGLE_OAUTH_CLIENT_ID}&scope=openid%20email%20profile&access_type=offline`;
+const googleSignInUrl = `http://localhost:8000/authorize`;
 /**
  * Navigation Routing link content
  *    for the center-side navigation
@@ -40,14 +40,12 @@ function Nav() {
    * Hook: nav content change from the bar to the drawer
    *       based on breakpoint
    */
-
-
   const theme = useTheme();
   const isNavBar = useMediaQuery(theme.breakpoints.up("medium"));
   const [open, setOpen] = useState(false);
   const location = useLocation();
 
-  const googleSignInUrl = `https://accounts.google.com/o/oauth2/v2/auth?redirect_uri=${GOOGLE_OAUTH_CALLBACK_URL}&prompt=consent&response_type=code&client_id=${GOOGLE_OAUTH_CLIENT_ID}&scope=openid%20email%20profile&access_type=offline`;
+
   // TODO: make a social page about all of the team members, provide social media link
 
 
