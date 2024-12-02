@@ -4,4 +4,5 @@ CacheControl
 google-auth-oauthlib 
 google-auth
 google-api-python-client
+flask-cors
 beautifulsoup4
