@@ -80,7 +80,7 @@ def authorize():
     return redirect(authorization_url)
 
 #TODO: provide check authorization and fetch api
-
+#TODO: check why the recall is the /callback but not /callback/
 @app.route("/callback/")
 def callback():
     

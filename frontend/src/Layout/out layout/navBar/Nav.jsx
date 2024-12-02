@@ -1,3 +1,6 @@
+
+// The login url and using google link is here!
+
 import React from "react";
 import { useState } from "react";
 import { NavLink, useLocation } from "react-router-dom";
@@ -14,20 +17,16 @@ import {
   ListItemIcon,
   ListItemText,
 } from "@mui/material";
-
 import Divider from "@mui/material/Divider";
-
 import MenuIcon from "@mui/icons-material/Menu";
-
 import Logo from "./Logo";
-
 import pages from "../../../pages";
 import { iconMap } from "../../../lib/vars";
 
 
 
-const GOOGLE_OAUTH_CLIENT_ID = process.env.REACT_APP_GOOGLE_OAUTH_CLIENT_ID;
-const GOOGLE_OAUTH_CALLBACK_URL = process.env.REACT_APP_GOOGLE_OAUTH_CALLBACK_URL;
+const GOOGLE_OAUTH_CLIENT_ID = import.meta.env.VITE_GOOGLE_OAUTH_CLIENT_ID;
+const GOOGLE_OAUTH_CALLBACK_URL = import.meta.env.VITE_GOOGLE_OAUTH_CALLBACK_URL;
 
 
 /**
@@ -50,6 +49,7 @@ function Nav() {
 
   const googleSignInUrl = `https://accounts.google.com/o/oauth2/v2/auth?redirect_uri=${GOOGLE_OAUTH_CALLBACK_URL}&prompt=consent&response_type=code&client_id=${GOOGLE_OAUTH_CLIENT_ID}&scope=openid%20email%20profile&access_type=offline`;
   // TODO: make a social page about all of the team members, provide social media link
+
 
   //this is the navbar format
   const main_navigation = (
@@ -143,7 +143,7 @@ function Nav() {
               end
               className="text-sm font-semibold leading-6 text-gray-900"
             >
-              {"Sign in "}
+              
               {iconMap["Sign in"]}
             </NavLink>
           </div>
