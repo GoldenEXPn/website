@@ -10,6 +10,8 @@ import googleapiclient.discovery
 import cachecontrol
 from google_auth_oauthlib.flow import Flow
 from functools import wraps
+from bs4 import BeautifulSoup
+import re
 
 import base64
 import html
@@ -64,9 +66,8 @@ def authorize():
     session["state"] = state
     return redirect(authorization_url)
 
-
-
 #TODO: provide check authorization and fetch api
+
 
 @app.route("/callback")
 def callback():
@@ -153,11 +154,11 @@ def fetch_emails():
             parts = payload.get("parts", [])
             body = payload.get("body", {})
 
-            print(msg['payload'].keys())
-            print(body)
+            # print(msg['payload'].keys())
+            # print(body)
             email = {
                 "id": msg["id"],
-                "snippet": msg["snippet"],
+                # "snippet": msg["snippet"],
             }
 
             for header in headers:
@@ -178,9 +179,8 @@ def fetch_emails():
                         break  # Prioritize plain text
                     elif part.get("mimeType") == "text/html" and email_content is None:
                         email_content = part["body"].get("data")  # Fallback to HTML if plain text not found
-            
             if email_content:
-                email["body"] = html.unescape(base64.urlsafe_b64decode(email_content).decode("utf-8"))
+                email["body"] = clean_email_body(email_content)
             else:
                 email["body"] = "No content found"        
             emails.append(email)
@@ -189,6 +189,27 @@ def fetch_emails():
 
     except Exception as e:
         return {"status": "error", "message": str(e)}, 500
+
+def clean_email_body(raw_body):
+    raw_body = base64.urlsafe_b64decode(raw_body).decode('utf-8')
+
+    # Remove extra newlines and carriage returns (\n, \r)
+    clean_body = raw_body.replace("\r", " ").replace("\n", " ")
+
+    # Use BeautifulSoup to remove HTML tags
+    soup = BeautifulSoup(clean_body, 'html.parser')
+    text = soup.get_text(separator=" ", strip=True)  # Extract text without tags
+
+    # Remove all URLs using regex
+    text = re.sub(r'http[s]?://(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*\\(\\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+', '', text)
+    text = re.sub(r'www\.[a-zA-Z0-9-]+\.[a-zA-Z]{2,}', '', text)  # Also remove URLs starting with "www."
+    
+    # Optionally, remove email signatures or disclaimers
+    # This is just an example and can be adapted based on known patterns
+    text = re.sub(r"(\n\s*-+\s*)|(\n\s*Best regards\s*[\w\s]+[^\w\s])", "", text)
+
+    return text
+
 
 @app.route('/clear')
 def clear_credentials():

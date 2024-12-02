@@ -1,6 +1,7 @@
 flask
 google-oauth
-cachecontrol
-google-auth 
+CacheControl
 google-auth-oauthlib 
+google-auth
 google-api-python-client
+beautifulsoup4
