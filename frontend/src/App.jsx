@@ -24,11 +24,9 @@ import FadeWrapper from "./components/wrappers/FadeWrapper";
 import LandingLayout from "./Layout/out layout/LandingLayout";
 import { TokenProvider } from "./components/elements/TokenContext.js";
 import AppLayout from "./Layout/in layout/AppLayout.js";
-// import AppLayout from "./Layout/in layout/AppLayout";
 
-// import Auth from "./pages/auth/Auth";
-// import DashBoard from "./pages/"
-import { handleGoogleCallback, Loader } from "./loader.js";
+import{ handleGoogleCallback } from "./handleGoogleCallback";
+import Loader from "./components/elements/Loader";
 
 const App = () => {
   useEffect(() => {
@@ -85,15 +83,10 @@ const App = () => {
     {
       path: "/google/callback",
       loader: handleGoogleCallback,
-      element:(
-          <TokenProvider>
-            <Loader />
-          </TokenProvider>
-      )
+      element: <Loader />,
     },
     {
       path: "/app",
-      loader: handleGoogleCallback,
       element: (
         <TokenProvider>
           <AppLayout />

@@ -1,65 +1,24 @@
-# TODO
-- 8/15/2024
+### Workflows
 
-## Ideas
-- there is home, news, team contacts, and login.
-    - login logs and check the authorization
-    - login leads to a protected router fo web app for visualization, model, and database
-- build the structure
+Oauth2.0 Workflow:
 
-- I need to go over the scss files and understand them.
-- figure out log-in page, and web-app authorization open, protected route
-- figure out the initialization of content
-- routing change for gsap animation
+![Oauth2.0 workflow](/images/google-oauth-workflow.png)
 
+Overall Workflow:
+1. User click login button (/src/Layout/out layout/navBar/LoginButton.js) with google_sign_in_url
+2. In App.jsx, we handle google redirect url with **handleGoogleCallback** (src/handleGoogleCallback.js)
+   - url = new URL(request.url)
+   - code = url.searchParams.get('code'), error = url.searchParams.get('error')
+   - response = await fetch('http://localhost:8000/api/google/callback)
+- ## TODO
+**Jerry**
+- backend: 
+  - listen to request
+  - store request's user code && access token && refresh token && expires_in
+- Online computing
+  - store user's email
+  - Find out split process
 
-## layout 
-- intro 
-    - only home has intro animation
-- header 
-    - should be a little fancy
-- nav
-    - left: 
-        - Home, News, contacts
-    - right:  *NOT FINISHED*
-        - sign me up! (if this should be a pop up) 
-        - Login
-
-- log-in *NOT FINISHED*
-    - pop up 
-
-- main 
-    - all page inside content:
-        - home
-        - news
-        - contacts *NOT FINISHED*
-
-- home
-    - about product
-- news
-    - recent news about the product and the team members
-- contacts
-    - member cards
-        - like posts, pictures in circles, names, contributions (title), description(p), and available social media icons and links in the bottom row.
-
-- When logged in
-    - no home, no news, no heading
-    - contacts in another style
-- web app
-    - my page/ main page/ show stats and graphs,
-    - about me (nav)
-        - my info
-        - setting
-    - left drawer menu
-        - Home visual
-        - model param
-        - share....
-        - .... (ideas)
-
-
-## challenges for right now.
-- scss file might not be compatiable with some preset button or asset libraries, I think those scss layout does a great job in layouts and breakpoints. 
-- protected class, for login
 
 ## Available Scripts
 

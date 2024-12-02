@@ -25,15 +25,5 @@ pages.set("contact", {
   landing: true,
   app: false,
 });
-// pages.set("login", {
-//   name: "Sign in",
-//   path: "/auth",
-//   anchorable: true,
-//   landing: false,
-//   app: false,
-// });
-
-// console.log(Array.from(pages.values()))
-// console.log(pages.get("login"))
 
 export default pages;

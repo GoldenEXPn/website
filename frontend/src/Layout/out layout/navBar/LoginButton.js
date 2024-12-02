@@ -4,7 +4,7 @@ import React from 'react';
 
 
 const GOOGLE_OAUTH_CLIENT_ID = process.env.REACT_APP_GOOGLE_OAUTH_CLIENT_ID;
-const GOOGLE_OAUTH_CALLBACK_URL = process.env.REACT_APP_GOOGLE_OAUTH_CALLBACK_URL;
+const GOOGLE_REDIRECT_URL = process.env.REACT_APP_GOOGLE_REDIRECT_URL;
 
 // import iconMap from "../../../asset/iconMap";
 
