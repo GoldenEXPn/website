@@ -2,7 +2,7 @@
 
 const plugin = require('tailwindcss/plugin')
 
-import { _bp } from './src/lib/vars'
+import { _bp } from '../frontend/src/lib/vars'
 
 module.exports = {
   content: [

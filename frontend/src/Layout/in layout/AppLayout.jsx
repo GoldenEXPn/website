@@ -10,18 +10,14 @@ import theme from "../../asset/styles/theme";
 
 import { ThemeProvider } from "@mui/material/styles";
 import CssBaseline from "@mui/material/CssBaseline";
-import {
-  TokenProvider,
-  useToken,
-} from "../../components/elements/TokenContext";
 
-const HomeLayout = () => {
-  const { token, setToken } = useToken();
+
+const AppLayout = () => {
   console.log("AppLayout rendered");
-  const data = useLoaderData();
+
   const navigate = useNavigate();
+
   
-  console.log(data)
   // useEffect(() => {
   //   if (data?.token) {
   //     // Set token in context
@@ -48,4 +44,4 @@ const HomeLayout = () => {
   );
 };
 
-export default HomeLayout;
+export default AppLayout;
