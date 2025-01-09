@@ -14,13 +14,12 @@ import {
   RouterProvider,
 } from "react-router-dom";
 
-
 import Home from "./pages/out/home/index";
 import News from "./pages/out/news/News";
 
 import FadeWrapper from "./components/wrappers/FadeWrapper";
 import LandingLayout from "./Layout/out layout/LandingLayout";
-import AppLayout from "./Layout/in layout/AppLayout.js";
+import AppLayout from "./Layout/in layout/AppLayout";
 
 const App = () => {
   useEffect(() => {

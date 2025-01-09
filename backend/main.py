@@ -6,6 +6,8 @@ import flask
 import requests
 import pathlib
 from dotenv import load_dotenv
+
+#api
 import google.oauth2.credentials
 from google.oauth2 import id_token
 import googleapiclient.discovery
@@ -13,11 +15,17 @@ import cachecontrol
 from google_auth_oauthlib.flow import Flow
 from functools import wraps
 
+#connection to frontend
 from flask_cors import CORS
 
+#string decoding
 from bs4 import BeautifulSoup
 import re
 import base64
+
+#database
+from pymongo import MongoClient
+
 
 CLIENT_SECRETS_FILE = "client_secret.json"
 
@@ -32,12 +40,20 @@ API_VERSION = "v2"
 
 app = flask.Flask(__name__)
 
-load_dotenv()
+# this is a mongodb database
+client = MongoClient('localhost', 27017)
+db = client.flask_database
 
+# this is user email collection
+user_emails = db.user_emails
+
+#get env file
+load_dotenv()
 database_url = os.getenv("DATABASE_URL")
 app.secret_key = os.getenv("GOOGLE_OAUTH_CLIENT_SECRET")
 GOOGLE_CLIENT_ID = os.getenv("GOOGLE_OAUTH_CLIENT_ID")
 client_secrets_file = os.path.join(pathlib.Path(__file__).parent, "client_secret.json")
+
 
 CORS(app)
 
@@ -172,7 +188,7 @@ def fetch_emails():
     
     try:
         # Fetch the list of messages
-        results = service.users().messages().list(userId="me", maxResults=1).execute()
+        results = service.users().messages().list(userId="me", maxResults=20).execute()
         messages = results.get("messages", [])
 
         emails = []
@@ -220,27 +236,34 @@ def fetch_emails():
     except Exception as e:
         return {"status": "error", "message": str(e)}, 500
 
+#   Helper function for fetch emails.
+#   This function removes the html and symbol base64-code tags (e.g. \uXXXX)
+
 def clean_email_body(raw_body):
     raw_body = base64.urlsafe_b64decode(raw_body).decode('utf-8')
-
+    
     # Remove extra newlines and carriage returns (\n, \r)
     clean_body = raw_body.replace("\r", " ").replace("\n", " ")
-
-    clean_body = clean_body.replace("\u200c", " ").replace("\u00a9", " ")
-    # Use BeautifulSoup to remove HTML tags
+    
+    # Use BeautifulSoup to remove HTML tags for further decoding
     soup = BeautifulSoup(clean_body, 'html.parser')
     text = soup.get_text(separator=" ", strip=True)  # Extract text without tags
 
+    # Remove Unicode escape sequences (like \uXXXX) using regex
+    text = re.sub(r'\\u[0-9a-fA-F]{4}', '', text)
+
+    # Remove special symbols or invisible characters (e.g., soft hyphens, non-breaking spaces)
+    text = re.sub(r'[^\x00-\x7F]+', ' ', text)  # Replace non-ASCII characters with space
+    
     # Remove all URLs using regex
     text = re.sub(r'http[s]?://(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*\\(\\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+', '', text)
-    text = re.sub(r'www\.[a-zA-Z0-9-]+\.[a-zA-Z]{2,}', '', text)  # Also remove URLs starting with "www."
+    text = re.sub(r'www\.[a-zA-Z0-9-]+\.[a-zA-Z]{2,}', '', text)  # Remove URLs starting with "www."
     
-    # Optionally, remove email signatures or disclaimers
-    # This is just an example and can be adapted based on known patterns
-    text = re.sub(r"(\n\s*-+\s*)|(\n\s*Best regards\s*[\w\s]+[^\w\s])", "", text)
+    # # Optionally, remove email signatures or disclaimers
+    # # This is just an example and can be adapted based on known patterns
+    # text = re.sub(r"(\n\s*-+\s*)|(\n\s*Best regards\s*[\w\s]+[^\w\s])", "", text)
 
     return text
-
 
 @app.route('/clear')
 def clear_credentials():
@@ -264,30 +287,6 @@ def check_granted_scopes(credentials):
   else:
     features['email'] = False
   return features
-
-# def print_index_table():
-#     return (
-#         "<table>"
-#         + '<tr><td><a href="/test">Test an API request</a></td>'
-#         + "<td>Submit an API request and see a formatted JSON response. "
-#         + "    Go through the authorization flow if there are no stored "
-#         + "    credentials for the user.</td></tr>"
-#         + '<tr><td><a href="/authorize">Test the auth flow directly</a></td>'
-#         + "<td>Go directly to the authorization flow. If there are stored "
-#         + "    credentials, you still might not be prompted to reauthorize "
-#         + "    the application.</td></tr>"
-#         + '<tr><td><a href="/revoke">Revoke current credentials</a></td>'
-#         + "<td>Revoke the access token associated with the current user "
-#         + "    session. After revoking credentials, if you go to the test "
-#         + "    page, you should see an <code>invalid_grant</code> error."
-#         + "</td></tr>"
-#         + '<tr><td><a href="/clear">Clear Flask session credentials</a></td>'
-#         + "<td>Clear the access token currently stored in the user session. "
-#         + '    After clearing the token, if you <a href="/test">test the '
-#         + "    API request</a> again, you should go back to the auth flow."
-#         + "</td></tr></table>"
-#     )
-
 
 if __name__ == "__main__":
     # When running locally, disable OAuthlib's HTTPs verification.

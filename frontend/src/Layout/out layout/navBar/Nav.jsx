@@ -24,11 +24,8 @@ import Logo from "./Logo";
 import pages from "../../../pages";
 import { iconMap } from "../../../lib/vars";
 
-
-
-const GOOGLE_OAUTH_CLIENT_ID = process.env.REACT_APP_GOOGLE_OAUTH_CLIENT_ID;
-const GOOGLE_OAUTH_CALLBACK_URL = process.env.REACT_APP_GOOGLE_OAUTH_CALLBACK_URL;
-
+// const GOOGLE_OAUTH_CLIENT_ID = process.env.REACT_APP_GOOGLE_OAUTH_CLIENT_ID;
+// const GOOGLE_OAUTH_CALLBACK_URL = process.env.REACT_APP_GOOGLE_OAUTH_CALLBACK_URL;
 
 /**
  * Navigation Routing link content

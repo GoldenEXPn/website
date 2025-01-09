@@ -6,3 +6,6 @@ google-auth
 google-api-python-client
 flask-cors
 beautifulsoup4
+
+pymongo[srv]
+Flask-PyMongo
