@@ -24,12 +24,13 @@ Now using node v20.15.1 (npm v10.7.0)
 1. To start a python enviroment:
     ```python -m venv env```
 
-2. To activate the enviroment:
- - for windows
-```env\Scripts\activate```
+2a. To activate the python venv:
+ - for windows ```env\Scripts\activate```
+ - for mac ```source env/bin/activate```
 
- - for mac
-```source env/bin/activate```
+2b. To activate the conda venv:
+- Create a new environment with python: ```conda create --name myenv python```
+- Activate the environment: ```conda activate myenv```
 
 3. Install the dependency for django:
 ```cd backend```
